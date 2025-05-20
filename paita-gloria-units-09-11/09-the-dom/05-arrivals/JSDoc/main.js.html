@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file main.js
+ * @author Gloria Paita
+ * 
+ * @description This script is my approach to solving Exercise 05 of the DOM unit. 
+ * It dynamically simulates an airport arrivals board: updating flight data, managing statuses, 
+ * and rendering changes in real time using JavaScript and the DOM.
+ */
+
+// --------------------------------------------------------------------
+// INITIAL SETUP
+
+
+// Array of flight arrivals
+const arrivals = [
+    {
+        date: "",
+        hour: "",
+        origin: "REGGIO CALABRIA",
+        flight: "FR8594",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "MUNICH",
+        flight: "EN8256",
+        status: "",
+        notes: "-",
+        airplane: "E95"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARCELONA",
+        flight: "FR774",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "NAPOLI",
+        flight: "FR3298",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "COPENHAGEN",
+        flight: "FR5088",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "PARIS Charles de Gaulle",
+        flight: "AF1702",
+        status: "",
+        notes: "-",
+        airplane: "E90"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "FRANKFURT",
+        flight: "EN8848",
+        status: "",
+        notes: "-",
+        airplane: "E95"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARCELONA",
+        flight: "VY6514",
+        status: "",
+        notes: "-",
+        airplane: "319"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "ROMA Fiumicino",
+        flight: "AZ1435",
+        status: "",
+        notes: "-",
+        airplane: "319"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARI",
+        flight: "FR8341",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "TRAPANI",
+        flight: "FR5903",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "LONDON Stansted",
+        flight: "FR7758",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "PARIS Charles de Gaulle",
+        flight: "AF1202",
+        status: "",
+        notes: "-",
+        airplane: "E90"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "IASI",
+        flight: "W43677",
+        status: "",
+        notes: "-",
+        airplane: "320"
+    }
+];
+
+
+// Array of possible flight statuses
+const statuses = ["ON_TIME", "DELAYED", "DEPARTING"];
+
+
+// Current date and time
+const date = new Date();
+
+
+// --------------------------------------------------------------------
+// FUNCTIONS TO SET UP THE TABLE
+
+
+/**
+ * @function generateDateHour
+ * @description
+ * Generates a simulated arrival time and date for each flight, adding a random delay between 0 and 15 minutes.
+ * It also adds a `dateObject` property to each flight for easier sorting and comparison.
+ *
+ * @param {Object[]} arrivalsList - Array of flight objects to be updated.
+ * @returns {void}
+ *
+ * @example
+ * generateDateHour(arrivals);
+ * // Each flight will now have updated `date`, `hour`, and `dateObject` fields
+ */
+function generateDateHour(arrivalsList) {
+    for (let flight of arrivalsList) {
+
+        // Generate a delay (from 0 to 15 minutes)
+        const randomDelayPerMinute = Math.floor(Math.random() * 15 * 60000);
+
+        // Add the random delay to the current date
+        const dateToUse = new Date(date.getTime() + randomDelayPerMinute);  // Convert to Date object
+
+        // Format date as "DD-MM"
+        const day = String(dateToUse.getDate()).padStart(2, '0');
+        const month = String(dateToUse.getMonth() + 1).padStart(2, '0');
+        const formattedDate = `${day}-${month}`;
+
+        // Sets the date for each flight in the array
+        flight.date = formattedDate;
+
+        // Format time as "HH:MM"
+        const hours = String(dateToUse.getHours()).padStart(2, '0');
+        const minutes = String(dateToUse.getMinutes()).padStart(2, '0');
+        const formattedTime = `${hours}:${minutes}`;
+
+        // Sets the hour for each flight in the array
+        flight.hour = formattedTime;
+
+        // Store the full Date object for sorting and comparisons
+        flight.dateObject = dateToUse;
+    }
+}
+
+
+/**
+ * @function sortArrivals
+ * @description
+ * Sorts the flight arrivals list in chronological order based on the `dateObject` property.
+ *
+ * @param {Object[]} arrivalsList - Array of flight objects to be sorted.
+ * @returns {void}
+ *
+ * @example
+ * sortArrivals(arrivals);
+ * // ➤ Flights are now ordered from earliest to latest
+ */
+function sortArrivals(arrivalsList) {
+
+    arrivalsList.sort((a, b) => a.dateObject - b.dateObject);
+
+}
+
+
+/**
+ * @function addStartingStatus
+ * @description
+ * Assigns an initial status to each flight. If the current time matches the flight's time,
+ * the status is set to `"ARRIVED"`. Otherwise, a random status is assigned from the provided list.
+ * If the status is `"DELAYED"`, an expected arrival time is calculated and added to the `notes` field.
+ *
+ * @param {Object[]} arrivalsList - Array of flight objects.
+ * @param {string[]} statusList - Array of possible flight statuses.
+ * @returns {void}
+ *
+ * @example
+ * addStartingStatus(arrivals, statuses);
+ * // ➤ Each flight will have a status and optional notes if delayed
+ */
+function addStartingStatus(arrivalsList, statusList) {
+
+    // Loop through each flight in the arrivalsList
+    arrivalsList.forEach(flight => {
+
+        // Compare the minutes of the current date with the flight's arrival time
+        const flightMinutes = flight.dateObject.getMinutes();
+        const flightHour = flight.dateObject.getHours();
+        const currentMinutes = date.getMinutes();
+        const currentHour = date.getHours();
+
+        // If the flight's time matches the current time, mark it as "ARRIVED"
+        if (flightHour === currentHour &amp;&amp; flightMinutes === currentMinutes) {
+            flight.status = "ARRIVED";
+
+        } else {
+
+            // Randomly assign a status from the status list
+            flight.status = statusList[Math.floor(Math.random() * statusList.length)];
+
+            // If the flight is delayed, calculate the expected arrival time
+            if (flight.status === "DELAYED") {
+                // Generates a delay (1 to 10 minutes)
+                const randomDelayTime = Math.floor(Math.random() * 10 * 60000) + 60000;
+                const delayedDate = new Date(flight.dateObject.getTime() + randomDelayTime);
+
+                const hours = String(delayedDate.getHours()).padStart(2, '0');
+                const minutes = String(delayedDate.getMinutes()).padStart(2, '0');
+                const formattedDelayedDate = `${hours}:${minutes}`;
+
+                flight.notes = `EXPECTED AT ${formattedDelayedDate}`;
+                flight.expectedDateObject = delayedDate;
+            }
+        }
+    });
+}
+
+
+/**
+ * @function updateTimeMsg
+ * @description
+ * Updates the DOM element with ID `"update-time"` to display the current time in local format.
+ *
+ * @returns {void}
+ *
+ * @example
+ * updateTimeMsg();
+ * // ➤ The element shows something like "14:32:05"
+ */
+function updateTimeMsg() {
+    const updateMsg = document.getElementById("update-time");
+    updateMsg.textContent = `${new Date().toLocaleTimeString()}`;
+}
+
+
+/**
+ * @function addNextFlight
+ * @description
+ * Creates a table row (`tr`) for a flight and appends it to the table body.
+ * If the flight is delayed, a special CSS class `"delayed"` is added for styling.
+ * Also stores the DOM row element in the `flight.rowElement` property for future access.
+ *
+ * @param {Object} flight - The flight object to render in the table.
+ * @param {string} flight.date - The formatted flight date (e.g. "14-04").
+ * @param {string} flight.hour - The formatted flight hour (e.g. "14:30").
+ * @param {string} flight.origin - The origin city or airport.
+ * @param {string} flight.flight - The flight code.
+ * @param {string} flight.status - The flight status ("ON_TIME", "DELAYED", etc.).
+ * @param {string} flight.notes - Any additional notes (e.g. "EXPECTED AT 14:45").
+ * @param {string} flight.airplane - The airplane model code (e.g. "73H").
+ * @returns {void}
+ *
+ * @example
+ * addNextFlight(arrivals[0]);
+ * // The table will show the first flight and highlight it if delayed
+ */
+function addNextFlight(flight) {
+    const newRow = document.createElement("tr");
+
+    // Create the table row structure
+    newRow.innerHTML = `
+        &lt;td>${flight.date}&lt;/td>
+        &lt;td>${flight.hour}&lt;/td>
+        &lt;td>${flight.origin}&lt;/td>
+        &lt;td>${flight.flight}&lt;/td>
+        &lt;td>${flight.status}&lt;/td>
+        &lt;td>${flight.notes}&lt;/td>
+        &lt;td>${flight.airplane}&lt;/td>
+    `;
+
+    // Store the table row element in the flight object for future updates
+    flight.rowElement = newRow;
+
+    // Add a "delayed" class for styling if the flight is delayed
+    if (flight.status === "DELAYED") {
+        newRow.classList.add("delayed");
+    }
+
+    // Append the row to the table body
+    tableBody.appendChild(newRow);
+}
+
+
+// --------------------------------------------------------------------
+// FUNCTIONS INVOKED EVERY 10 SECONDS
+
+
+/**
+ * @function changeStatus
+ * @description
+ * Updates the status of flights currently marked as `"DEPARTING"`. If a flight remains in this state
+ * for 6 intervals (60 seconds), it resets to `"ON_TIME"`. Also updates the flight's table row in the DOM.
+ *
+ * A `updateCounter` property is used to track how many intervals the flight has been in `"DEPARTING"`.
+ *
+ * @param {Object[]} arrivalsList - Array of flight objects to update.
+ * @param {string} arrivalsList[].status - Current flight status.
+ * @param {number} [arrivalsList[].updateCounter] - How many intervals the flight has been `"DEPARTING"`.
+ * @param {HTMLElement} [arrivalsList[].rowElement] - Table row element associated with the flight.
+ *
+ * @returns {void}
+ * 
+ * @example
+ * // Called every 10 seconds inside a setInterval loop
+ * changeStatus();
+ * // ➤ If a flight is "DEPARTING" for 1 minute, it becomes "ON_TIME"
+ */
+function changeStatus(arrivalsList) {
+    arrivalsList.forEach(flight => {
+        if (flight.updateCounter === undefined) {
+            flight.updateCounter = 0;
+        } else {
+            flight.updateCounter++;
+        }
+
+        if (flight.status === "DEPARTING" &amp;&amp; flight.updateCounter >= 6) {
+            flight.status = "ON_TIME";
+
+            // Only try to update the DOM if rowElement exists
+            if (flight.rowElement &amp;&amp; flight.rowElement.children[4]) {
+                flight.rowElement.children[4].textContent = "ON_TIME";
+            }
+        }
+    });
+}
+
+
+/**
+ * @function isArrived
+ * @description
+ * Checks each flight to determine if it has arrived based on either:
+ * - `expectedDateObject` for delayed flights
+ * - `dateObject` for other statuses
+ *
+ * When a flight is considered arrived:
+ * - The status is updated to `"ARRIVED"`
+ * - The table is updated (status column and notes cleared)
+ * - The `"delayed"` class is removed from the row if present
+ *
+ * @param {Object[]} arrivalsList - Array of flight objects to check.
+ * @param {string} arrivalsList[].status - Current flight status.
+ * @param {Date} [arrivalsList[].expectedDateObject] - Expected arrival time for delayed flights.
+ * @param {Date} [arrivalsList[].dateObject] - Scheduled arrival time for on-time flights.
+ * @param {HTMLElement} [arrivalsList[].rowElement] - Table row element in the DOM.
+ * 
+ * @returns {void}
+ *
+ * @example
+ * isArrived();
+ * // ➤ Flights that have reached their time will now be marked as "ARRIVED"
+ */
+function isArrived(arrivalsList) {
+    const currentDate = new Date();
+
+    arrivalsList.forEach(flight => {
+        const row = flight.rowElement;
+
+        // DELAYED flights: compare expected arrival time
+        if (flight.status === "DELAYED" &amp;&amp; flight.expectedDateObject) {
+            if (flight.expectedDateObject.getTime() &lt;= currentDate.getTime()) {
+                flight.status = "ARRIVED";
+
+                // Update table row
+                row.classList.remove("delayed");
+                row.children[4].textContent = "ARRIVED"; // status
+                row.children[5].textContent = "-";       // notes
+
+                flight.notes = "-";
+            }
+        }
+
+        // ON_TIME or other flights: compare original arrival time
+        else if (flight.status !== "ARRIVED" &amp;&amp; flight.dateObject) {
+            if (flight.dateObject.getTime() &lt;= currentDate.getTime()) {
+                flight.status = "ARRIVED";
+
+                row.children[4].textContent = "ARRIVED";
+                row.children[5].textContent = "-";
+
+                flight.notes = "-";
+            }
+        }
+    });
+}
+
+
+/**
+ * @function removeArrivedFlights
+ * @description
+ * Removes flights from the DOM after they have remained with `"ARRIVED"` status for 6 intervals (60 seconds).
+ * A `arrivalCounter` is added to each flight to track how long it has been marked as `"ARRIVED"`.
+ *
+ * This function helps keep the table clean by removing old entries.
+ * 
+ * @param {Object[]} arrivalsList - Array of flight objects to check and clean.
+ * @param {string} arrivalsList[].status - Current flight status.
+ * @param {number} [arrivalsList[].arrivalCounter] - Counter tracking how long the flight has been "ARRIVED".
+ * @param {HTMLElement} [arrivalsList[].rowElement] - Table row element in the DOM.
+ * 
+ * @returns {void}
+ *
+ * @example
+ * removeArrivedFlights();
+ * // ➤ Flights that arrived 1 minute ago will be removed from the table
+ */
+function removeArrivedFlights(arrivalsList) {
+    arrivalsList.forEach(flight => {
+        if (flight.status === "ARRIVED") {
+
+            if (flight.arrivalCounter === undefined) {
+                flight.arrivalCounter = 0;
+            } else {
+                flight.arrivalCounter++;
+            }
+
+            if (flight.arrivalCounter >= 6) {
+                if (flight.rowElement &amp;&amp; flight.rowElement.parentNode) {
+                    flight.rowElement.remove();
+                }
+            }
+        }
+    });
+}
+
+
+// --------------------------------------------------------------------
+// START OF THE PROGRAM
+
+
+// Generate flight dates and times
+generateDateHour(arrivals);
+
+// Sort flights by date and time
+sortArrivals(arrivals);
+
+// Assign initial statuses to flights
+addStartingStatus(arrivals, statuses);
+
+// Get the table body element
+const tableBody = document.getElementById("flight-table-body");
+
+// Index to track the next flight to add to the table
+let flightIndex = 0;
+
+// Update the table and statuses every 10 seconds
+setInterval(() => {
+
+    updateTimeMsg();
+
+    const flight = arrivals[flightIndex];
+
+    // Stop the interval when no more data
+    if (flightIndex &lt; arrivals.length) {
+        addNextFlight(flight);
+        flightIndex++;
+    }
+
+    changeStatus(arrivals);
+
+    isArrived(arrivals);
+
+    removeArrivedFlights(arrivals);
+
+    // To keep an eye on the counters, uncomment
+    //console.log("----------------");
+    //arrivals.forEach(flight => {console.log(flight.origin, flight.status, flight.updateCounter, flight.arrivalCounter);});
+
+}, 10000); // Run every 10 seconds</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNextFlight">addNextFlight</a></li><li><a href="global.html#addStartingStatus">addStartingStatus</a></li><li><a href="global.html#changeStatus">changeStatus</a></li><li><a href="global.html#generateDateHour">generateDateHour</a></li><li><a href="global.html#isArrived">isArrived</a></li><li><a href="global.html#removeArrivedFlights">removeArrivedFlights</a></li><li><a href="global.html#sortArrivals">sortArrivals</a></li><li><a href="global.html#updateTimeMsg">updateTimeMsg</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon May 19 2025 20:53:44 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

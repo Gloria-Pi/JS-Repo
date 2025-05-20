@@ -1,0 +1,24 @@
+{
+    "model": "Flare Blitz",
+    "make": "Charizard Motors",
+    "year": 2021,
+    "price": 65000,
+    "isElectric": false,
+    "features": [
+        "Leather Seats",
+        "Panoramic Roof",
+        "Adaptive Cruise Control",
+        "Blind Spot Detection"
+    ],
+    "insurance": {
+        "company": "Hoenn Insurance",
+        "policyNumber": "HO1122334455",
+        "expiryDate": "2025-12-20",
+        "isPaid": true
+    },
+    "previousOwners": [
+        "Sophia Martin"
+    ],
+    "mileage": 15000,
+    "carId": "car03"
+}

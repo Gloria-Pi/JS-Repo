@@ -1,0 +1,287 @@
+/**
+ * @file main.js
+ * @author Gloria Paita
+ * 
+ * @description
+ * This script is my approach to solving Exercise 02 of Unit 10.
+ * The goal of this exercise is to set up a dynamic calculator page that handles multiple types 
+ * of calculations (to find the square of a number, half of a number, the percentage that one 
+ * number is of another, the area of a circle with a given radius).
+ * The results will be displayed inside the "solution" div.
+ * As a personal bonus I created a reset button to clear the solution div and all input fields.
+ */
+
+// MODIFYING THE FUNCTIONS FROM A PREVIOUS EXERCISE ---------------------------------
+
+/**
+ * @function rounder
+ * @description Rounds a number to two decimal places.
+ * @param {number} numToRound - The number to be rounded.
+ * @returns {number} The rounded number.
+ * @example
+ * rounder(3.14159); // returns 3.14
+ */
+function rounder(numToRound) {
+    const roundedNum = Math.round(numToRound * 100) / 100;
+    return roundedNum;
+}
+
+/**
+ * @function squareNumber
+ * @description Retrieves a number from the "square-input" field, calculates its square, 
+ * rounds the result, and displays it.
+ */
+function squareNumber() {
+    const num = document.querySelector("#square-input").value;
+    const squaredNum = rounder(Math.pow(num, 2));
+    const result = `The result of squaring the number ${num} is ${squaredNum}.`;
+    addTextNodeToSolutionDiv(result);
+}
+
+/**
+ * @function halfNumber
+ * @description Retrieves a number from the "halved-input" field, calculates half of it, 
+ * rounds the result, and displays it.
+ */
+function halfNumber() {
+    const num = document.querySelector("#halved-input").value;
+    const dividedNum = rounder(num / 2);
+    const result = `Half of ${num} is ${dividedNum}.`;
+    addTextNodeToSolutionDiv(result);
+}
+
+/**
+ * @function percentOf
+ * @description Retrieves two numbers from the "percentage-input" and "reference-input" fields, 
+ * calculates the percentage, rounds the result, and displays it.
+ */
+function percentOf() {
+    const num1 = document.querySelector("#percentage-input").value;
+    const num2 = document.querySelector("#reference-input").value;
+    const percentage = rounder((num1 / num2) * 100);
+    const result = `${num1} is ${percentage}% of ${num2}.`;
+    addTextNodeToSolutionDiv(result);
+}
+
+/**
+ * @function areaOfCircle
+ * @description Retrieves a radius from the "radius-input" field, calculates the area of the circle, 
+ * rounds the result, and displays it.
+ */
+function areaOfCircle() {
+    const radius = document.querySelector("#radius-input").value;
+    const area = rounder(Math.PI * Math.pow(radius, 2));
+    const result = `The area for a circle with radius ${radius} is ${area}.`;
+    addTextNodeToSolutionDiv(result);
+}
+
+// SETTING UP THE HTML PAGE ---------------------------------------------
+
+/**
+ * @function createLineBreak
+ * @description Creates and returns a line break (`<br>`) HTML element.
+ * @returns {HTMLBRElement} A new `<br>` element.
+ */
+function createLineBreak() {
+    return document.createElement("br");
+}
+
+/**
+ * @function addLabelToDoc
+ * @description Dynamically adds a label and input field for a new calculation type after the last label.
+ * @param {string} typeOfCalc - The text describing the calculation.
+ * @param {string} idName - The ID to assign to the input element.
+ */
+function addLabelToDoc(typeOfCalc, idName) {
+    const newLabel = document.createElement("label");
+    const htmlLabel = document.querySelector("body label:last-of-type").insertAdjacentElement("afterend", newLabel);
+    htmlLabel.textContent = `${typeOfCalc} this number: `;
+    htmlLabel.insertAdjacentElement("beforebegin", createLineBreak());
+
+    /**
+     * @function addInputToLabel
+     * @description Creates and appends a number input field to the newly created label.
+     * @param {string} idName - The ID to assign to the input element.
+     */
+    function addInputToLabel(idName) {
+        const newInput = document.createElement("input");
+
+        newInput.setAttribute("type", "number");
+        newInput.setAttribute("id", `${idName}`);
+        newInput.setAttribute("size", "2");
+
+        htmlLabel.appendChild(newInput);
+    }
+    addInputToLabel(idName);
+}
+
+// Dynamically create input fields for the new calculations
+addLabelToDoc("Find half of", "halved-input");
+addLabelToDoc("Find the percentage of", "percentage-input");
+addLabelToDoc(" in relation to", "reference-input");
+document.querySelector("body br:last-of-type").remove();
+addLabelToDoc("Find the area of a circle with radius ", "radius-input");
+
+const button = document.getElementById("square-button");
+button.insertAdjacentElement("beforebegin", createLineBreak());
+
+
+// THE "CALCULATE" BUTTON ------------------------------------------
+
+/**
+ * @description
+ * Adds an event listener to the "Calculate" button.
+ * When clicked, it checks each input and calls the appropriate calculation function if input is provided.
+ */
+button.addEventListener("click",
+    function () {
+        const valueOfSquareInput = document.getElementById("square-input").value;
+        const valueOfHalvedInput = document.getElementById("halved-input").value;
+        const valueOfPercentageInput = document.getElementById("percentage-input").value;
+        const valueOfReferenceInput = document.getElementById("reference-input").value;
+        const valueOfRadiusInput = document.getElementById("radius-input").value;
+
+        if (valueOfSquareInput !== "") {
+            squareNumber();
+        }
+        if (valueOfHalvedInput !== "") {
+            halfNumber();
+        }
+        if (valueOfPercentageInput !== "" && valueOfReferenceInput !== "") {
+            percentOf();
+        }
+        if (valueOfRadiusInput !== "") {
+            areaOfCircle();
+        }
+    }
+);
+
+/**
+ * @description
+ * Sets up event listeners for each input field to respond to the "Enter" key (to calculate) or "Delete" key (to clear all inputs).
+ */
+document.getElementById("square-input").addEventListener("keydown",
+    function (event) {
+        if (event.key === "Enter" &&
+            document.getElementById("square-input").value !== "") {
+            squareNumber();
+        }
+
+        if (event.key === "Delete") {
+            deleteInputContent();
+        }
+    }
+);
+
+document.getElementById("halved-input").addEventListener("keydown",
+    function (event) {
+        if (event.key === "Enter" &&
+            document.getElementById("halved-input").value !== "") {
+            halfNumber();
+        }
+
+        if (event.key === "Delete") {
+            deleteInputContent();
+        }
+    }
+);
+
+document.getElementById("percentage-input").addEventListener("keydown",
+    function (event) {
+        if (event.key === "Enter" &&
+            document.getElementById("percentage-input").value !== "" &&
+            document.getElementById("reference-input").value !== "") {
+            percentOf();
+        }
+
+        if (event.key === "Delete") {
+            deleteInputContent();
+        }
+    }
+);
+
+document.getElementById("reference-input").addEventListener("keydown",
+    function (event) {
+        if (event.key === "Enter" &&
+            document.getElementById("percentage-input").value !== "" &&
+            document.getElementById("reference-input").value !== "") {
+            percentOf();
+        }
+
+        if (event.key === "Delete") {
+            deleteInputContent();
+        }
+    }
+);
+
+document.getElementById("radius-input").addEventListener("keydown",
+    function (event) {
+        if (event.key === "Enter" &&
+            document.getElementById("radius-input").value !== "") {
+            areaOfCircle();
+        }
+
+        if (event.key === "Delete") {
+            deleteInputContent();
+        }
+    }
+);
+
+
+// THE RESET BUTTON -----------------------------------------
+
+/**
+ * @function createNewButton
+ * @description Creates and returns a new button element with specified text and ID.
+ * @param {string} buttonTxt - The text displayed on the button.
+ * @param {string} buttonId - The ID assigned to the button.
+ * @returns {HTMLButtonElement} The created button element.
+ */
+function createNewButton(buttonTxt, buttonId) {
+    const newButton = document.createElement("button");
+    newButton.textContent = buttonTxt;
+    newButton.setAttribute("id", buttonId);
+    return newButton;
+}
+
+// Create and set up the "Reset" button
+const resetButton = createNewButton("Reset", "reset-button");
+button.insertAdjacentElement("afterend", resetButton);
+resetButton.addEventListener("click", deleteDivContent);
+resetButton.addEventListener("click", deleteInputContent);
+
+/**
+ * @function deleteDivContent
+ * @description Clears the content inside the "solution" div.
+ */
+function deleteDivContent() {
+    const solutionDiv = document.getElementById("solution");
+    solutionDiv.textContent = "";
+}
+
+/**
+ * @function deleteInputContent
+ * @description Clears the values of all input fields used in the calculations.
+ */
+function deleteInputContent() {
+    document.getElementById("square-input").value = "";
+    document.getElementById("halved-input").value = "";
+    document.getElementById("percentage-input").value = "";
+    document.getElementById("reference-input").value = "";
+    document.getElementById("radius-input").value = "";
+}
+
+// THE SOLUTION DIV ----------------------------------------
+
+/**
+ * @function addTextNodeToSolutionDiv
+ * @description Adds a result text as a new text node into the "solution" div and inserts a line break after it.
+ * @param {string} resultText - The result text to be displayed.
+ */
+function addTextNodeToSolutionDiv(resultText) {
+    const solutionDiv = document.getElementById("solution");
+    const newTextNode = document.createTextNode(`${resultText}`);
+
+    solutionDiv.appendChild(newTextNode);
+    solutionDiv.appendChild(createLineBreak());
+}

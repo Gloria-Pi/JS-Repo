@@ -1,0 +1,12 @@
+/* This ruleset will be applied to the page after 4 seconds */
+
+ul {
+    padding: 0;
+}
+
+.list-item {
+    color: white;
+    font-weight: bold;
+    background-color: orange;
+    list-style: none;
+}

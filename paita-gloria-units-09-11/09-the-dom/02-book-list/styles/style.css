@@ -1,0 +1,45 @@
+footer, h1 {
+    background-color: black;
+    color: whitesmoke;
+    align-content: center;
+    text-align: center;
+    padding: 10px;
+}
+
+li img {
+    height: 250px;
+    border: 1px solid black;
+    border-radius: 2%;
+    display: block;
+    margin: 5px 0 15px 35px;
+}
+
+
+/* ASSIGNMENT: change the style of the book depending on whether you have read it or not */
+.read {
+    background-color: rgb(139, 186, 139);
+    
+}
+
+.unread {
+    background-color: rgb(186, 156, 139);
+}
+
+
+/*Adding checkmarks and crosses*/
+li {
+    list-style: none; /* Remove default bullets */
+    padding-left: 0;
+}
+
+li.read::before {
+    content: "✔️ ";
+    color: green;
+    margin-right: 8px;
+}
+
+li.unread::before {
+    content: "✖️ ";
+    color: red;
+    margin-right: 8px;
+}

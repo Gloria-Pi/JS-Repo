@@ -1,0 +1,264 @@
+/**
+ * @file main.js
+ * @author Gloria Paita
+ * 
+ * @description
+ * A simple animation exercise where a cat moves left and right across the screen,
+ * controlled by buttons that start, stop, increase, or decrease its speed.
+ * The interface updates accordingly and prevents invalid button interactions.
+ */
+
+/**
+ * @function createButton
+ * @description
+ * Creates a button element, sets its text and ID, and appends it to a specified container.
+ *
+ * @param {string} btnText - The text to be displayed on the button.
+ * @param {string} btnId - The ID to assign to the button.
+ * @param {HTMLElement} btnWhereToAppend - The container where the button will be appended.
+ */
+function createButton(btnText, btnId, btnWhereToAppend) {
+    const newBtn = document.createElement("button");
+    newBtn.textContent = btnText;
+    newBtn.setAttribute("id", btnId);
+    btnWhereToAppend.appendChild(newBtn);
+}
+
+/**
+ * @function createDiv
+ * @description
+ * Creates a div with a given ID and inserts it into the DOM relative to another element.
+ *
+ * @param {string} divId - The ID to assign to the new div.
+ * @param {InsertPosition} divPosition - The position to insert relative to the target.
+ * @param {HTMLElement} divAdjacentElement - The element to insert relative to.
+ */
+function createDiv(divId, divPosition, divAdjacentElement) {
+    const newDiv = document.createElement("div");
+    newDiv.setAttribute("id", divId);
+    divAdjacentElement.insertAdjacentElement(divPosition, newDiv);
+}
+
+/**
+ * @function createP
+ * @description
+ * Creates a paragraph element and appends it to the specified parent element.
+ *
+ * @param {string} pText - The text content for the paragraph.
+ * @param {HTMLElement} pWhereToAppend - The container to append the paragraph into.
+ */
+function createP(pText, pWhereToAppend) {
+    const newP = document.createElement("p");
+    newP.textContent = pText;
+    pWhereToAppend.appendChild(newP);
+}
+
+/**
+ * @function createSpan
+ * @description
+ * Creates a span element and appends it to the specified parent element.
+ *
+ * @param {string} spanText - The text content for the span.
+ * @param {HTMLElement} spanWhereToAppend - The container to append the span into.
+ */
+function createSpan(spanText, spanWhereToAppend) {
+    const newSpan = document.createElement("span");
+    newSpan.textContent = spanText;
+    spanWhereToAppend.appendChild(newSpan);
+}
+
+// ----------------------------------------------
+//              INITIAL SETUP
+// ----------------------------------------------
+
+
+//THE CAT
+const cat = document.getElementsByTagName('img')[0];
+cat.style.left = "0px";
+
+let pixelSpeed = 10;
+
+// UI SETUP
+document.body.style.overflow = "hidden";
+
+createDiv("btn-div", "beforebegin", cat);
+createButton("Start", "btn-start", document.getElementById("btn-div"));
+createButton("Faster", "btn-faster", document.getElementById("btn-div"));
+createButton("Slower", "btn-slower", document.getElementById("btn-div"));
+createButton("Stop", "btn-stop", document.getElementById("btn-div"));
+createButton("Reset", "btn-reset", document.getElementById("btn-div"));
+createP("Current nyooms levels: ", document.getElementById("btn-div"));
+createSpan("", document.getElementsByTagName("p")[0]);
+const span = document.getElementsByTagName("span")[0];
+span.textContent = "0pixels/50ms";
+
+const startButton = document.getElementById("btn-start");
+const fasterButton = document.getElementById("btn-faster");
+const slowerButton = document.getElementById("btn-slower");
+const stopButton = document.getElementById("btn-stop");
+const resetButton = document.getElementById("btn-reset");
+
+// Event listeners
+startButton.addEventListener("click", catWalkBackForth);
+stopButton.addEventListener("click", catWalkStop);
+fasterButton.addEventListener("click", catHasTheZoomies);
+slowerButton.addEventListener("click", catSlowDown);
+resetButton.addEventListener("click", resetSpeed);
+
+// Movement intervals
+let backwardId;
+let forwardId;
+
+// Initial button states
+stopButton.disabled = true;
+resetButton.disabled = true;
+
+/**
+ * @function displaySpeed
+ * @description
+ * Updates the speed indicator text in the UI.
+ */
+function displaySpeed() {
+    span.textContent = pixelSpeed + "pixels/50ms";
+}
+
+/**
+ * @function catWalkBackForth
+ * @description
+ * Starts the animation of the cat moving back and forth across the screen.
+ * Handles direction switching and sets button states accordingly.
+ */
+function catWalkBackForth() {
+
+    displaySpeed();
+
+    /**
+     * @function catWalkBackwards
+     * @description
+     * Moves the cat to the left until it reaches the window's left edge.
+     * Reverses direction when the edge is reached.
+     */
+    function catWalkBackwards() {
+        backwardId = window.setInterval(() => {
+            if (parseInt(cat.style.left) <= 0) {
+                cat.style.transform = "scaleX(1)";
+                clearInterval(backwardId);
+                catWalkForwards();
+            } else {
+                let oldXPosition = parseInt(cat.style.left);
+                let newXPosition = oldXPosition - pixelSpeed;
+                cat.style.left = newXPosition + "px";
+            }
+        }, 50);
+    }
+
+    /**
+     * @function catWalkForwards
+     * @description
+     * Moves the cat to the right until it reaches the window's right edge.
+     * Reverses direction when the edge is reached.
+     */
+    function catWalkForwards() {
+        forwardId = window.setInterval(() => {
+            if (cat.offsetWidth + parseInt(cat.style.left) >= window.innerWidth) {
+                cat.style.transform = "scaleX(-1)";
+                clearInterval(forwardId);
+                catWalkBackwards();
+            } else {
+                let oldXPosition = parseInt(cat.style.left);
+                let newXPosition = oldXPosition + pixelSpeed;
+                cat.style.left = newXPosition + "px";
+            }
+        }, 50);
+    }
+
+    if (cat.style.transform === "scaleX(1)") {
+        catWalkForwards();
+    } else {
+        catWalkBackwards();
+    }
+
+    // Update button states
+    stopButton.disabled = false;
+    fasterButton.disabled = false;
+    slowerButton.disabled = false;
+    startButton.disabled = true;
+}
+
+/**
+ * @function catWalkStop
+ * @description
+ * Stops the cat's movement and resets the button and UI states.
+ */
+function catWalkStop() {
+    if (cat.style.transform === "scaleX(-1)") {
+        clearInterval(backwardId);
+    }
+    if (cat.style.transform === "scaleX(1)") {
+        clearInterval(forwardId);
+    }
+
+    stopButton.disabled = true;
+    fasterButton.disabled = true;
+    slowerButton.disabled = true;
+    startButton.disabled = false;
+
+    span.textContent = "0pixels/50ms";
+}
+
+/**
+ * @function catHasTheZoomies
+ * @description
+ * Increases the cat's movement speed and restarts its animation.
+ */
+function catHasTheZoomies() {
+    pixelSpeed += 10;
+    restartCatMovement();
+    if (pixelSpeed !== 10) {
+        resetButton.disabled = false;
+    } else {
+        resetButton.disabled = true;
+    }
+}
+
+/**
+ * @function catSlowDown
+ * @description
+ * Decreases the cat's speed (with a lower limit) and restarts the animation.
+ */
+function catSlowDown() {
+    pixelSpeed = Math.max(1, pixelSpeed - 10);
+    restartCatMovement();
+    if (pixelSpeed === 1) {
+        slowerButton.disabled = true;
+    }
+    if (pixelSpeed !== 10) {
+        resetButton.disabled = false;
+    } else {
+        resetButton.disabled = true;
+    }
+}
+
+/**
+ * @function restartCatMovement
+ * @description
+ * Stops the current movement and restarts it to apply new speed.
+ */
+function restartCatMovement() {
+    clearInterval(forwardId);
+    clearInterval(backwardId);
+    catWalkBackForth();
+}
+
+/**
+ * @function resetSpeed
+ * @description
+ * Resets the cat's speed to default and restarts its movement.
+ */
+function resetSpeed() {
+    pixelSpeed = 10;
+    restartCatMovement();
+    if (pixelSpeed === 10) {
+        resetButton.disabled = true;
+    }
+}

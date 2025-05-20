@@ -1,0 +1,22 @@
+{
+    "model": "Water Gun",
+    "make": "Squirtle Motors",
+    "year": 2022,
+    "price": 24000,
+    "isElectric": false,
+    "features": [
+        "Heated Seats",
+        "Lane Assist",
+        "Bluetooth",
+        "Remote Start"
+    ],
+    "insurance": {
+        "company": "Sinnoh Insurance",
+        "policyNumber": "SI567890123",
+        "expiryDate": "2025-08-14",
+        "isPaid": false
+    },
+    "previousOwners": null,
+    "mileage": 0,
+    "carId": "car04"
+}

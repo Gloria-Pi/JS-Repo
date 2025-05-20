@@ -1,0 +1,24 @@
+{
+    "model": "Evolution",
+    "make": "Eevee Motors",
+    "year": 2020,
+    "price": 54000,
+    "isElectric": false,
+    "features": [
+        "Navigation System",
+        "Panoramic Sunroof",
+        "Heated and Cooled Seats",
+        "Apple CarPlay"
+    ],
+    "insurance": {
+        "company": "Unova Insurance",
+        "policyNumber": "UN9876543210",
+        "expiryDate": "2025-07-30",
+        "isPaid": true
+    },
+    "previousOwners": [
+        "Daniel King"
+    ],
+    "mileage": 25000,
+    "carId": "car05"
+}

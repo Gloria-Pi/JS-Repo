@@ -1,0 +1,87 @@
+/* =====================
+   GENERAL
+===================== */
+
+body {
+    background-color: rgb(255, 197, 197);
+}
+
+footer, h1, h3 {
+    background-color: black;
+    color: whitesmoke;
+    align-content: center;
+    text-align: center;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+
+/* =====================
+   THE STACKS
+===================== */
+
+ul {
+    padding-inline-start: 0;
+    height: 200px;
+    overflow-y: auto;
+}
+
+li {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 0.8px;
+    list-style: none;
+    text-align: center;
+}
+
+#dirty-stack-section, #clean-stack-section {
+    display: flex;
+    column-gap: 25px;
+    justify-content: center;
+    padding: 10px 0;
+    margin-bottom: 5px;
+}
+
+.dirty-stack {
+    background-color: whitesmoke;
+    border: solid 4px rgb(209, 123, 123);
+    border-radius: 30px;
+    padding: 5px 0;
+    width: 230px;
+}
+
+.clean-stack ul {
+    column-count: 5;
+    column-gap: 20px;
+    width: max-content;
+    margin: 0 auto;
+    padding: 15px 0;
+}
+
+.clean-stack {
+    display: flex;
+    background-color: whitesmoke;
+    border: solid 4px rgb(209, 165, 123);
+    border-radius: 30px;
+    padding: 10px 0;
+    width: 760px;
+}
+
+#dirty-stack-section p,
+#clean-stack-section p {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    margin: 0;
+    padding-bottom: 8px;
+}
+
+span {
+    font-size: 18px;
+    color: rgb(98, 98, 98);
+    border: solid rgb(98, 98, 98) 0.3px;
+    padding: 1px 5px;
+    border-radius: 10%;
+    font-weight: 600;
+}

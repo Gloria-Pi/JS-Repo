@@ -1,0 +1,132 @@
+{
+    "name": "RocketFueled Car Lab",
+    "location": "Spaceport City, Alola",
+    "establishedYear": 2012,
+    "isOperating": true,
+    "totalEmployees": 1080,
+    "annualRevenue": 48000000,
+    "facilities": {
+        "assemblyLine": "The HyperLoop",
+        "paintShop": "ColorBlaster 5000",
+        "qualityControl": "The TestZone"
+    },
+    "motto": "We don’t just make cars, we make history!",
+    "cars": [
+        {
+            "carId": "car01",
+            "make": "Pikachu Motors",
+            "model": "Thunderbolt",
+            "year": 2018,
+            "price": 18000,
+            "isElectric": true,
+            "features": [
+                "Bluetooth",
+                "Remote Start",
+                "Backup Camera",
+                "Heated Seats"
+            ],
+            "insurance": {
+                "company": "Kanto Insurance",
+                "policyNumber": "KA234567890",
+                "expiryDate": "2025-04-10",
+                "isPaid": true
+            },
+            "previousOwners": null,
+            "mileage": 0
+        },
+        {
+            "carId": "car02",
+            "make": "Bulbasaur Motors",
+            "model": "VineWhip",
+            "year": 2020,
+            "price": 23000,
+            "isElectric": false,
+            "features": [
+                "Apple CarPlay",
+                "Navigation System",
+                "Blind Spot Monitoring",
+                "Heated Seats"
+            ],
+            "insurance": {
+                "company": "Johto Insurance",
+                "policyNumber": "JO0987654321",
+                "expiryDate": "2026-02-01",
+                "isPaid": false
+            },
+            "previousOwners": [
+                "Emily Davis"
+            ],
+            "mileage": 30000
+        },
+        {
+            "carId": "car03",
+            "make": "Charizard Motors",
+            "model": "Flare Blitz",
+            "year": 2021,
+            "price": 65000,
+            "isElectric": false,
+            "features": [
+                "Leather Seats",
+                "Panoramic Roof",
+                "Adaptive Cruise Control",
+                "Blind Spot Detection"
+            ],
+            "insurance": {
+                "company": "Hoenn Insurance",
+                "policyNumber": "HO1122334455",
+                "expiryDate": "2025-12-20",
+                "isPaid": true
+            },
+            "previousOwners": [
+                "Sophia Martin"
+            ],
+            "mileage": 15000
+        },
+        {
+            "carId": "car04",
+            "make": "Squirtle Motors",
+            "model": "Water Gun",
+            "year": 2022,
+            "price": 24000,
+            "isElectric": false,
+            "features": [
+                "Heated Seats",
+                "Lane Assist",
+                "Bluetooth",
+                "Remote Start"
+            ],
+            "insurance": {
+                "company": "Sinnoh Insurance",
+                "policyNumber": "SI567890123",
+                "expiryDate": "2025-08-14",
+                "isPaid": false
+            },
+            "previousOwners": null,
+            "mileage": 0
+        },
+        {
+            "carId": "car05",
+            "make": "Eevee Motors",
+            "model": "Evolution",
+            "year": 2020,
+            "price": 54000,
+            "isElectric": false,
+            "features": [
+                "Navigation System",
+                "Panoramic Sunroof",
+                "Heated and Cooled Seats",
+                "Apple CarPlay"
+            ],
+            "insurance": {
+                "company": "Unova Insurance",
+                "policyNumber": "UN9876543210",
+                "expiryDate": "2025-07-30",
+                "isPaid": true
+            },
+            "previousOwners": [
+                "Daniel King"
+            ],
+            "mileage": 25000
+        }
+    ]
+}

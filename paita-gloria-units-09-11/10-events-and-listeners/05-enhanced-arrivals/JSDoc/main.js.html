@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file main.js
+ * @author Gloria Paita
+ * 
+ * @description
+ * This script is my approach to solving Exercise 05 of the Events and Listeners unit.
+ * It enhances the previous "Arrivals" exercise by adding interactive features such as
+ * expandable rows, an accordion-like behavior, and a toggleable "Departures" section.
+ */
+
+// --------------------------------------------------------------------
+// INITIAL SETUP
+
+/**
+ * @typedef {Object} Flight
+ * @property {string} date - The formatted flight date (e.g., "14-04").
+ * @property {string} hour - The formatted flight hour (e.g., "14:30").
+ * @property {string} origin - The origin city or airport.
+ * @property {string} flight - The flight code.
+ * @property {string} status - The flight status (e.g., "ON_TIME", "DELAYED").
+ * @property {string} notes - Any additional notes (e.g., "EXPECTED AT 14:45").
+ * @property {string} airplane - The airplane model code (e.g., "73H").
+ * @property {string} [checkin] - The check-in counter for departures.
+ * @property {Date} [dateObject] - The full Date object for sorting and comparisons.
+ * @property {Date} [expectedDateObject] - The expected time for delayed flights.
+ * @property {HTMLElement} [rowElement] - The DOM element representing the flight row.
+ * @property {HTMLElement} [details] - The DOM element for the flight's expandable details.
+ * @property {number} [arrivalCounter] - Counter for how long the flight has been "ARRIVED".
+ * @property {number} [departureCounter] - Counter for how long the flight has been "DEPARTED".
+ * @property {number} [updateCounter] - Counter for how long the flight has been in a specific status.
+ */
+
+/**
+ * @constant {Flight[]} arrivals
+ * @description
+ * Array of arriving flights with initial data.
+ */
+const arrivals = [
+    {
+        date: "",
+        hour: "",
+        origin: "REGGIO CALABRIA",
+        flight: "FR8594",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "MUNICH",
+        flight: "EN8256",
+        status: "",
+        notes: "-",
+        airplane: "E95"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARCELONA",
+        flight: "FR774",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "NAPOLI",
+        flight: "FR3298",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "COPENHAGEN",
+        flight: "FR5088",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "PARIS Charles de Gaulle",
+        flight: "AF1702",
+        status: "",
+        notes: "-",
+        airplane: "E90"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "FRANKFURT",
+        flight: "EN8848",
+        status: "",
+        notes: "-",
+        airplane: "E95"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARCELONA",
+        flight: "VY6514",
+        status: "",
+        notes: "-",
+        airplane: "319"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "ROMA Fiumicino",
+        flight: "AZ1435",
+        status: "",
+        notes: "-",
+        airplane: "319"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARI",
+        flight: "FR8341",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "TRAPANI",
+        flight: "FR5903",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "LONDON Stansted",
+        flight: "FR7758",
+        status: "",
+        notes: "-",
+        airplane: "73H"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "PARIS Charles de Gaulle",
+        flight: "AF1202",
+        status: "",
+        notes: "-",
+        airplane: "E90"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "IASI",
+        flight: "W43677",
+        status: "",
+        notes: "-",
+        airplane: "320"
+    }
+];
+
+/**
+ * @constant {Flight[]} departures
+ * @description
+ * Array of departing flights with initial data.
+ */
+const departures = [
+    {
+        date: "",
+        hour: "",
+        origin: "REGGIO CALABRIA",
+        flight: "FR8594",
+        status: "",
+        notes: "-",
+        airplane: "73H",
+        checkin: "A"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "MUNICH",
+        flight: "EN8256",
+        status: "",
+        notes: "-",
+        airplane: "E95",
+        checkin: "B"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARCELONA",
+        flight: "FR774",
+        status: "",
+        notes: "-",
+        airplane: "73H",
+        checkin: "C"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "NAPOLI",
+        flight: "FR3298",
+        status: "",
+        notes: "-",
+        airplane: "73H",
+        checkin: "A"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "COPENHAGEN",
+        flight: "FR5088",
+        status: "",
+        notes: "-",
+        airplane: "73H",
+        checkin: "B"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "PARIS Charles de Gaulle",
+        flight: "AF1702",
+        status: "",
+        notes: "-",
+        airplane: "E90",
+        checkin: "C"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "FRANKFURT",
+        flight: "EN8848",
+        status: "",
+        notes: "-",
+        airplane: "E95",
+        checkin: "D"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARCELONA",
+        flight: "VY6514",
+        status: "",
+        notes: "-",
+        airplane: "319",
+        checkin: "D"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "ROMA Fiumicino",
+        flight: "AZ1435",
+        status: "",
+        notes: "-",
+        airplane: "319",
+        checkin: "A"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "BARI",
+        flight: "FR8341",
+        status: "",
+        notes: "-",
+        airplane: "73H",
+        checkin: "B"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "TRAPANI",
+        flight: "FR5903",
+        status: "",
+        notes: "-",
+        airplane: "73H",
+        checkin: "C"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "LONDON Stansted",
+        flight: "FR7758",
+        status: "",
+        notes: "-",
+        airplane: "73H",
+        checkin: "D"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "PARIS Charles de Gaulle",
+        flight: "AF1202",
+        status: "",
+        notes: "-",
+        airplane: "E90",
+        checkin: "A"
+    },
+    {
+        date: "",
+        hour: "",
+        origin: "IASI",
+        flight: "W43677",
+        status: "",
+        notes: "-",
+        airplane: "320",
+        checkin: "D"
+    }
+];
+
+/**
+ * @constant {string[]} statuses
+ * @description
+ * Array of possible statuses for arriving flights.
+ */
+const statuses = ["ON_TIME", "DELAYED"];
+
+/**
+ * @constant {string[]} departingStatuses
+ * @description
+ * Array of possible statuses for departing flights.
+ */
+const departingStatuses = ["CHECK-IN IS OPEN", "DELAYED", "ON_TIME"];
+
+
+/**
+ * @constant {Date} date
+ * @description
+ * The current date and time.
+ */
+const date = new Date();
+
+//---------------------------------------------------------------------
+// TABS
+
+/**
+ * @description
+ * Handles tab switching between "Arrivals" and "Departures" sections.
+ * Highlights the active tab and shows the corresponding table with a fade-in effect.
+ */
+const tabs = document.querySelectorAll(".tab");
+const tableDivs = document.querySelectorAll("div.h2 ~ div");
+
+tabs.forEach((tab, tabIndex) => {
+    tab.addEventListener("click", () => {
+
+        // Highlights the clicked tab
+        tabs.forEach(t => { t.classList.remove("highlighted"); });
+        tab.classList.add("highlighted");
+
+        //Shows the matching table, while hiding the others
+        tableDivs.forEach((div, tableIndex) => {
+            if (tabIndex === tableIndex) {
+                div.classList.add("in");
+            } else {
+                div.classList.remove("in");
+            }
+        });
+    });
+});
+
+// --------------------------------------------------------------------
+// FUNCTIONS TO SET UP THE TABLE
+
+/**
+ * @function generateDateHour
+ * @description
+ * Generates a simulated arrival time and date for each flight, adding a random delay between 0 and 15 minutes.
+ * It also adds a `dateObject` property to each flight for easier sorting and comparison.
+ *
+ * @param {Flight[]} arrivalsList - Array of flight objects to be updated.
+ * @returns {void}
+ */
+function generateDateHour(arrivalsList) {
+    for (let flight of arrivalsList) {
+
+        // Generate a delay (from 0 to 15 minutes)
+        const randomDelayPerMinute = Math.floor(Math.random() * 15 * 60000);
+
+        // Add the random delay to the current date
+        const dateToUse = new Date(date.getTime() + randomDelayPerMinute);  // Convert to Date object
+
+        // Format date as "DD-MM"
+        const day = String(dateToUse.getDate()).padStart(2, '0');
+        const month = String(dateToUse.getMonth() + 1).padStart(2, '0');
+        const formattedDate = `${day}-${month}`;
+
+        // Sets the date for each flight in the array
+        flight.date = formattedDate;
+
+        // Format time as "HH:MM"
+        const hours = String(dateToUse.getHours()).padStart(2, '0');
+        const minutes = String(dateToUse.getMinutes()).padStart(2, '0');
+        const formattedTime = `${hours}:${minutes}`;
+
+        // Sets the hour for each flight in the array
+        flight.hour = formattedTime;
+
+        // Store the full Date object for sorting and comparisons
+        flight.dateObject = dateToUse;
+    }
+}
+
+/**
+ * @function sortFlights
+ * @description
+ * Sorts the flight arrivals list in chronological order based on the `dateObject` property.
+ *
+ * @param {Flight[]} arrivalsList - Array of flight objects to be sorted.
+ * @returns {void}
+ *
+ * @example
+ * sortFlights(arrivals);
+ * // ➤ Flights are now ordered from earliest to latest
+ */
+function sortFlights(arrivalsList) {
+    arrivalsList.sort((a, b) => a.dateObject - b.dateObject);
+}
+
+/**
+ * @function addArrivalsStatus
+ * @description
+ * Assigns an initial status to each flight. If the current time matches the flight's time,
+ * the status is set to `"ARRIVED"`. Otherwise, a random status is assigned from the provided list.
+ * If the status is `"DELAYED"`, an expected arrival time is calculated and added to the `notes` field.
+ *
+ * @param {Object[]} arrivalsList - Array of arriving flight objects.
+ * @param {string[]} statusList - Array of possible flight statuses.
+ * @returns {void}
+ *
+ * @example
+ * addArrivalsStatus(arrivals, statuses);
+ * // ➤ Each flight will have a status and optional notes if delayed
+ */
+function addArrivalsStatus(arrivalsList, statusList) {
+
+    // Loop through each flight in the arrivalsList
+    arrivalsList.forEach(flight => {
+
+        // Compare the minutes of the current date with the flight's arrival time
+        const flightMinutes = flight.dateObject.getMinutes();
+        const flightHour = flight.dateObject.getHours();
+        const currentMinutes = date.getMinutes();
+        const currentHour = date.getHours();
+
+        // If the flight's time matches the current time, mark it as "ARRIVED"
+        if (flightHour === currentHour &amp;&amp; flightMinutes === currentMinutes) {
+            flight.status = "ARRIVED";
+
+        } else {
+
+            // Randomly assign a status from the status list
+            flight.status = statusList[Math.floor(Math.random() * statusList.length)];
+
+            // If the flight is delayed, calculate the expected arrival time
+            if (flight.status === "DELAYED") {
+                // Generates a delay (1 to 10 minutes)
+                const randomDelayTime = Math.floor(Math.random() * 10 * 60000) + 60000;
+                const delayedDate = new Date(flight.dateObject.getTime() + randomDelayTime);
+
+                const hours = String(delayedDate.getHours()).padStart(2, '0');
+                const minutes = String(delayedDate.getMinutes()).padStart(2, '0');
+                const formattedDelayedDate = `${hours}:${minutes}`;
+
+                flight.notes = `EXPECTED AT ${formattedDelayedDate}`;
+                flight.expectedDateObject = delayedDate;
+            }
+        }
+    });
+}
+
+/**
+ * @function addDeparturesStatus
+ * @description
+ * Assigns an initial status to each departing flight. If the current time matches the flight's time,
+ * the status is set to `"DEPARTED"`. Otherwise, a random status is assigned from the provided list.
+ * If the status is `"DELAYED"`, an expected departure time is calculated and added to the `notes` field.
+ *
+ * @param {Flight[]} departuresList - Array of departing flight objects.
+ * @param {string[]} statusList - Array of possible flight statuses.
+ * @returns {void}
+ */
+function addDeparturesStatus(departuresList, statusList) {
+
+    // Loop through each flight in the arrivalsList
+    departuresList.forEach(flight => {
+
+        // Compare the minutes of the current date with the flight's departing time
+        const flightMinutes = flight.dateObject.getMinutes();
+        const flightHour = flight.dateObject.getHours();
+        const currentMinutes = date.getMinutes();
+        const currentHour = date.getHours();
+
+
+        // If the flight's time matches the current time, mark it as "DEPARTED"
+        if (flightHour === currentHour &amp;&amp; flightMinutes === currentMinutes) {
+            const hours = String(currentHour).padStart(2, '0');
+            const minutes = String(currentMinutes).padStart(2, '0');
+            const formattedCurrentTime = `${hours}:${minutes}`;
+
+            flight.status = `DEPARTED AT ${formattedCurrentTime}`;
+
+        } else {
+
+            // Randomly assign a status from the status list
+            flight.status = statusList[Math.floor(Math.random() * statusList.length)];
+
+            // If the flight is delayed, calculate the expected departure time
+            if (flight.status === "DELAYED") {
+                // Generates a delay (1 to 10 minutes)
+                const randomDelayTime = Math.floor(Math.random() * 10 * 60000) + 60000;
+                const delayedDate = new Date(flight.dateObject.getTime() + randomDelayTime);
+
+                const hours = String(delayedDate.getHours()).padStart(2, '0');
+                const minutes = String(delayedDate.getMinutes()).padStart(2, '0');
+                const formattedExpectedDate = `${hours}:${minutes}`;
+
+                flight.notes = `EXPECTED DEPARTURE AT ${formattedExpectedDate}`;
+                flight.expectedDateObject = delayedDate;
+            }
+        }
+    });
+}
+
+/**
+ * @function updateTimeMsg
+ * @description
+ * Updates the DOM element with ID `"update-time"` to display the current time in local format.
+ *
+ * @returns {void}
+ *
+ * @example
+ * updateTimeMsg();
+ * // ➤ The element shows something like "14:32:05"
+ */
+function updateTimeMsg() {
+    const updateMessages = document.querySelectorAll("#update-time");
+
+    updateMessages.forEach((message) => {
+        message.textContent = `${new Date().toLocaleTimeString()}`;
+    });
+}
+
+/**
+ * @function addNextFlight
+ * @description
+ * Creates a table row (`&lt;tr>`) for an arriving flight and appends it to the table body.
+ * If the flight is delayed, a special CSS class `"delayed"` is added for styling.
+ * Also stores the DOM row element in the `flight.rowElement` property for future access.
+ *
+ * @param {Flight} flight - The flight object to render in the table.
+ * @returns {void}
+ */
+function addNextFlight(flight) {
+
+    const newRow = document.createElement("tr");
+    newRow.classList.add("accordion-title");
+
+    // Create the table row structure
+    newRow.innerHTML = `
+        &lt;td>${flight.date}&lt;/td>
+        &lt;td>${flight.hour}&lt;/td>
+        &lt;td>${flight.origin}&lt;/td>
+        &lt;td>${flight.flight}&lt;/td>
+        &lt;td>${flight.status}&lt;/td>
+        &lt;td>${flight.notes}&lt;/td>
+        &lt;td>${flight.airplane}&lt;/td>
+    `;
+
+    const accordionContentRow = document.createElement("tr");
+    accordionContentRow.classList.add("accordion-content");
+    accordionContentRow.style.display = "none"; // Initially hidden
+    accordionContentRow.innerHTML = `
+    &lt;td colspan="7">
+        &lt;div class="flight-details">
+            &lt;!-- Additional flight details go here -->
+            &lt;p>No additional information about ${flight.flight}&lt;/p>
+        &lt;/div>
+    &lt;/td>
+    `;
+
+    // Store the detail row in the flight object for future reference
+    flight.details = accordionContentRow;
+
+    // Store the table row element in the flight object for future updates
+    flight.rowElement = newRow;
+
+    // Add a "delayed" class for styling if the flight is delayed
+    if (flight.status === "DELAYED") {
+        newRow.classList.add("delayed");
+    }
+
+    // Append the row to the table body
+    arrivalsTableBody.appendChild(newRow);
+    arrivalsTableBody.appendChild(accordionContentRow);
+
+    newRow.addEventListener("click", () => toggleAccordion(flight));
+
+}
+
+/**
+ * @function addDepartingFlight
+ * @description
+ * Creates a table row (`&lt;tr>`) for a departing flight and appends it to the table body.
+ * If the flight is delayed, a special CSS class `"delayed"` is added for styling.
+ * Also stores the DOM row element in the `flight.rowElement` property for future access.
+ *
+ * @param {Flight} flight - The flight object to render in the table.
+ * @returns {void}
+ */
+function addDepartingFlight(flight) {
+
+    const newRow = document.createElement("tr");
+    newRow.classList.add("accordion-title");
+
+    // Create the table row structure
+    newRow.innerHTML = `
+        &lt;td>${flight.date}&lt;/td>
+        &lt;td>${flight.hour}&lt;/td>
+        &lt;td>${flight.origin}&lt;/td>
+        &lt;td>${flight.flight}&lt;/td>
+        &lt;td>${flight.status}&lt;/td>
+        &lt;td>${flight.notes}&lt;/td>
+        &lt;td>${flight.airplane}&lt;/td>
+        &lt;td>${flight.checkin}&lt;/td>
+    `;
+
+    const accordionContentRow = document.createElement("tr");
+    accordionContentRow.classList.add("accordion-content");
+    accordionContentRow.style.display = "none"; // Initially hidden
+    accordionContentRow.innerHTML = `
+    &lt;td colspan="8">
+        &lt;div class="flight-details">
+            &lt;!-- Additional flight details go here -->
+            &lt;p>No additional information about ${flight.flight}&lt;/p>
+        &lt;/div>
+    &lt;/td>
+    `;
+
+    // Store the detail row in the flight object for future reference
+    flight.details = accordionContentRow;
+
+    // Store the table row element in the flight object for future updates
+    flight.rowElement = newRow;
+
+    // Add a "delayed" class for styling if the flight is delayed
+    if (flight.status === "DELAYED") {
+        newRow.classList.add("delayed");
+    }
+
+    // Append the row to the table body
+    departuresTableBody.appendChild(newRow);
+    departuresTableBody.appendChild(accordionContentRow);
+
+    newRow.addEventListener("click", () => toggleAccordion(flight));
+
+}
+
+// --------------------------------------------------------------------
+// ACCORDION MENU
+
+/**
+ * @function toggleAccordion
+ * @description
+ * Toggles the visibility of the details row for a flight. If another row is open,
+ * it will close that row before opening the clicked one.
+ *
+ * @param {Flight} flight - The flight object whose details row should be toggled.
+ * @returns {void}
+ */
+function toggleAccordion(flight) {
+
+    // Close all other open accordion rows
+    const accordionTitles = document.querySelectorAll(".accordion-title");
+
+    accordionTitles.forEach(row => {
+        if (row !== flight.rowElement &amp;&amp; row.classList.contains("active")) {
+            row.classList.remove("active");
+            const content = row.nextElementSibling;
+            if (content &amp;&amp; content.classList.contains("accordion-content")) {
+                content.style.display = "none";
+            }
+        }
+    });
+
+    // Toggle the clicked row
+    const content = flight.details;
+    if (content.style.display === "none") {
+        flight.rowElement.classList.add("active");
+        content.style.display = "";
+    } else {
+        flight.rowElement.classList.remove("active");
+        content.style.display = "none";
+    }
+}
+
+const allAccordions = document.querySelectorAll(".accordion-title");
+allAccordions.forEach(title => {
+    title.addEventListener("click", () => {
+        allAccordions.forEach(title => { title.classList.remove("active"); });
+        title.classList.add("active");
+    });
+});
+
+// --------------------------------------------------------------------
+// FUNCTIONS INVOKED EVERY 10 SECONDS
+
+/**
+ * @function changeDelayedStatusForDepartures
+ * @description
+ * Updates the status of departing flights currently marked as `"DELAYED"`. If a flight remains in this state
+ * for 6 intervals (60 seconds), it resets to `"ON_TIME"`. Also updates the flight's table row in the DOM.
+ *
+ * @param {Flight[]} departuresList - Array of departing flight objects to update.
+ * @returns {void}
+ */
+function changeDelayedStatusForDepartures(departuresList) {
+    departuresList.forEach(flight => {
+        if (flight.updateCounter === undefined) {
+            flight.updateCounter = 0;
+        } else {
+            flight.updateCounter++;
+        }
+
+        // If flight is delayed too long, mark as ON_TIME
+        if (flight.status === "DELAYED" &amp;&amp; flight.updateCounter >= 6) {
+            flight.status = "ON_TIME";
+            flight.notes = "-";
+
+            const flightCode = flight.flight || "Anonymous Flight";
+            flight.additionalMsg = `Sorry for the inconvenience. Flight ${flightCode} is once again on time.`;
+
+            if (flight.additionalMsg &amp;&amp; flight.rowElement) {
+                const detailsRow = flight.rowElement.nextElementSibling;  // The &lt;tr class="accordion-content">
+                if (detailsRow &amp;&amp; detailsRow.classList.contains("accordion-content")) {
+                    const detailsDiv = detailsRow.querySelector(".flight-details");
+                    if (detailsDiv &amp;&amp; !detailsDiv.querySelector(".additional-msg")) {
+                        const messageP = document.createElement("p");
+                        messageP.classList.add("additional-msg");
+                        messageP.textContent = flight.additionalMsg;
+                        detailsDiv.appendChild(messageP);
+                    }
+                }
+            }
+
+            // Only try to update the DOM if rowElement exists
+            if (flight.rowElement &amp;&amp; flight.rowElement.children.length >= 6) {
+                flight.rowElement.classList.remove("delayed");
+                flight.rowElement.children[4].textContent = "ON_TIME"; // status
+                flight.rowElement.children[5].textContent = "-";       // notes
+            }
+        }
+
+        if (flight.status === "ON_TIME" &amp;&amp; flight.updateCounter >= 6) {
+            if (flight.rowElement &amp;&amp; flight.rowElement.children[5]) {
+                flight.rowElement.children[5].textContent = "-"; // notes
+            }
+        }
+    });
+}
+
+/**
+ * @function isArrived
+ * @description
+ * Checks each arriving flight to determine if it has arrived based on its scheduled or expected time.
+ * Updates the flight's status and table row accordingly.
+ *
+ * @param {Flight[]} arrivalsList - Array of arriving flight objects to check.
+ * @returns {void}
+ */
+function isArrived(arrivalsList) {
+    const currentDate = new Date();
+
+    arrivalsList.forEach(flight => {
+        const row = flight.rowElement;
+
+        // DELAYED flights: compare expected arrival time
+        if (flight.status === "DELAYED" &amp;&amp; flight.expectedDateObject) {
+            if (flight.expectedDateObject.getTime() &lt;= currentDate.getTime()) {
+                flight.status = "ARRIVED";
+
+                // Update table row
+                row.classList.remove("delayed");
+                row.children[4].textContent = "ARRIVED"; // status
+                row.children[5].textContent = "-";       // notes
+
+                flight.notes = "-";
+            }
+        }
+
+        // ON_TIME or other flights: compare original arrival time
+        else if (flight.status !== "ARRIVED" &amp;&amp; flight.dateObject) {
+            if (flight.dateObject.getTime() &lt;= currentDate.getTime()) {
+                flight.status = "ARRIVED";
+
+                row.children[4].textContent = "ARRIVED";
+                row.children[5].textContent = "-";
+
+                flight.notes = "-";
+            }
+        }
+    });
+}
+
+/**
+ * @function isDeparted
+ * @description
+ * Checks each departing flight to determine if it has departed based on its scheduled or expected time.
+ * Updates the flight's status and table row accordingly.
+ *
+ * @param {Flight[]} departuresList - Array of departing flight objects to check.
+ * @returns {void}
+ */
+function isDeparted(departuresList) {
+    const currentDate = new Date();
+
+    departuresList.forEach(flight => {
+        const row = flight.rowElement;
+
+        // DELAYED flights: compare expected arrival time
+        if (flight.status === "DELAYED" &amp;&amp; flight.expectedDateObject) {
+            if (flight.expectedDateObject.getTime() &lt;= currentDate.getTime()) {
+                flight.status = "DEPARTED";
+
+                // Update table row
+                row.classList.remove("delayed");
+                row.children[4].textContent = "DEPARTED"; // status
+                row.children[5].textContent = "-";       // notes
+
+                flight.notes = "-";
+            }
+        }
+
+        // Other flights: compare original arrival time
+        else if (flight.status !== "DEPARTED" &amp;&amp; flight.dateObject) {
+            if (flight.dateObject.getTime() &lt;= currentDate.getTime()) {
+                flight.status = "DEPARTED";
+
+                row.children[4].textContent = "DEPARTED";
+                row.children[5].textContent = "-";
+
+                flight.notes = "-";
+            }
+        }
+    });
+}
+
+/**
+ * @function removeArrivedFlights
+ * @description
+ * Removes flights from the DOM after they have remained with `"ARRIVED"` status for 6 intervals (60 seconds).
+ *
+ * @param {Flight[]} arrivalsList - Array of arriving flight objects to check and clean.
+ * @returns {void}
+ */
+function removeArrivedFlights(arrivalsList) {
+    arrivalsList.forEach(flight => {
+        if (flight.status === "ARRIVED") {
+
+            if (flight.arrivalCounter === undefined) {
+                flight.arrivalCounter = 0;
+            } else {
+                flight.arrivalCounter++;
+            }
+
+            if (flight.arrivalCounter >= 6) {
+                //Remove both the main row and the detail row from the DOM
+                if (flight.rowElement &amp;&amp; flight.rowElement.parentNode) {
+                    flight.rowElement.remove();
+                }
+                if (flight.details &amp;&amp; flight.details.parentNode) {
+                    flight.details.remove();
+                }
+            }
+        }
+    });
+}
+
+/**
+ * @function removeDepartedFlights
+ * @description
+ * Removes flights from the DOM after they have remained with `"DEPARTED"` status for 6 intervals (60 seconds).
+ *
+ * @param {Flight[]} departuresList - Array of departing flight objects to check and clean.
+ * @returns {void}
+ */
+function removeDepartedFlights(departuresList) {
+    departuresList.forEach(flight => {
+        if (flight.status === "DEPARTED") {
+
+            if (flight.departureCounter === undefined) {
+                flight.departureCounter = 0;
+            } else {
+                flight.departureCounter++;
+            }
+
+            if (flight.departureCounter >= 6) {
+                //Remove both the main row and the detail row from the DOM
+                if (flight.rowElement &amp;&amp; flight.rowElement.parentNode) {
+                    flight.rowElement.remove();
+                }
+                if (flight.details &amp;&amp; flight.details.parentNode) {
+                    flight.details.remove();
+                }
+            }
+        }
+    });
+}
+
+// --------------------------------------------------------------------
+// START OF THE PROGRAM
+
+// Generate flight dates and times
+generateDateHour(arrivals);
+generateDateHour(departures);
+
+// Sort flights by date and time
+sortFlights(arrivals);
+sortFlights(departures);
+
+// Assign initial statuses to flights
+addArrivalsStatus(arrivals, statuses);
+addDeparturesStatus(departures, departingStatuses);
+
+// Get the table body element
+const arrivalsTableBody = document.getElementById("arrivals-table-body");
+const departuresTableBody = document.getElementById("departures-table-body");
+
+// Index to track the next flight to add to the table
+let arrFlightsIndex = 0;
+let depFlightsIndex = 0;
+
+// Update the table and statuses every 10 seconds
+setInterval(() => {
+
+    updateTimeMsg();
+
+    const arrivingFlight = arrivals[arrFlightsIndex];
+    const departingFlight = departures[arrFlightsIndex];
+
+    // Stop the interval when no more data
+    if (arrFlightsIndex &lt; arrivals.length) {
+        addNextFlight(arrivingFlight);
+        arrFlightsIndex++;
+    }
+
+    // Stop the interval when no more data
+    if (depFlightsIndex &lt; departures.length) {
+        addDepartingFlight(departingFlight);
+        depFlightsIndex++;
+    }
+
+    changeDelayedStatusForDepartures(departures);
+
+    isArrived(arrivals);
+    isDeparted(departures);
+
+    removeArrivedFlights(arrivals);
+    removeDepartedFlights(departures);
+
+}, 10000);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addArrivalsStatus">addArrivalsStatus</a></li><li><a href="global.html#addDepartingFlight">addDepartingFlight</a></li><li><a href="global.html#addDeparturesStatus">addDeparturesStatus</a></li><li><a href="global.html#addNextFlight">addNextFlight</a></li><li><a href="global.html#arrivals">arrivals</a></li><li><a href="global.html#changeDelayedStatusForDepartures">changeDelayedStatusForDepartures</a></li><li><a href="global.html#date">date</a></li><li><a href="global.html#departingStatuses">departingStatuses</a></li><li><a href="global.html#departures">departures</a></li><li><a href="global.html#generateDateHour">generateDateHour</a></li><li><a href="global.html#isArrived">isArrived</a></li><li><a href="global.html#isDeparted">isDeparted</a></li><li><a href="global.html#removeArrivedFlights">removeArrivedFlights</a></li><li><a href="global.html#removeDepartedFlights">removeDepartedFlights</a></li><li><a href="global.html#sortFlights">sortFlights</a></li><li><a href="global.html#statuses">statuses</a></li><li><a href="global.html#tabs">tabs</a></li><li><a href="global.html#toggleAccordion">toggleAccordion</a></li><li><a href="global.html#updateTimeMsg">updateTimeMsg</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Tue May 20 2025 21:47:33 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

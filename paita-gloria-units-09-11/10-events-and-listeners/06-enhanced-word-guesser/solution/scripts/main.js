@@ -1,0 +1,361 @@
+/**
+ * @file main.js
+ * @author Gloria Paita
+ * 
+ * @description
+ * This script implements a single-player Hangman game with a Pokémon theme.
+ * Player 1 attempts to guess the name of a randomly selected Pokémon by inputting letters.
+ * The game tracks score, displays a hangman figure with each wrong guess, and includes UI feedback.
+ * 
+ * Features:
+ * - Word selection from a predefined array of starter Pokémon
+ * - Visual hangman stages
+ * - Score and health tracking via DOM
+ * - Game state reset and continue functionality
+ * - Dynamic input handling and user feedback
+ */
+
+//---------------------------------------------------------------------
+// THE HANGMAN SECTION
+
+// Hangman image stages used for visual feedback.
+// Each wrong guess progresses the hangman image.
+const hangmanStages = [
+    "./assets/img/hangman-stages/hangman-0.svg",
+    "./assets/img/hangman-stages/hangman-1.svg",
+    "./assets/img/hangman-stages/hangman-2.svg",
+    "./assets/img/hangman-stages/hangman-3.svg",
+    "./assets/img/hangman-stages/hangman-4.svg",
+    "./assets/img/hangman-stages/hangman-5.svg",
+    "./assets/img/hangman-stages/hangman-6.svg",
+    "./assets/img/hangman-stages/hangman-7.png",
+    "./assets/img/hangman-stages/hangman-8.png",
+    "./assets/img/hangman-stages/hangman-9.png"
+];
+
+//---------------------------------------------------------------------
+// PLAYER 1 SECTION
+
+// Player 1 object. Manages name, score, game progress, UI updates.
+const p1 = {
+
+    /**
+     * Displays a message in the player narration section.
+     * @param {string} p1Message - The message to be shown to Player 1.
+     */
+    msgToThePlayer: function (p1Message) {
+        document.querySelector("#p1-narration-div > p").textContent = p1Message;
+    },
+
+    name: "",
+
+    /** Sets the player's name from the input field or defaults to "Trainer 1" */
+    setName: function () {
+        const player1Name = document.querySelector("#player1-name-input");
+        this.name = player1Name.value.trim() || "Trainer 1";
+        const p1Name = document.querySelectorAll(".player1-name");
+        p1Name.forEach(element => {
+            element.textContent = this.name;
+        });
+    },
+
+    score: 0,
+
+    /** Increments the player's score and updates the DOM */
+    giveAPoint: function () {
+        this.score += 1;
+        document.querySelector("#player1-score > p:nth-child(2)").textContent = this.score;
+    },
+
+    /** Resets the player's score and updates the DOM */
+    resetScore: function () {
+        this.score = 0;
+        document.querySelector("#player1-score > p:nth-child(2)").textContent = this.score;
+    },
+
+    totalHearts: [],
+    /** Resets hearts to full and updates the DOM */
+    resetHearts: function () {
+        const heartP = document.querySelector("#p1-hangman-tries > .remaining-tries");
+        this.totalHearts = ["❤", "❤", "❤", "❤", "❤", "❤", "❤", "❤", "❤", "❤"];
+        heartP.textContent = this.totalHearts.join("");
+    },
+
+    /** Removes one heart and updates the DOM */
+    removeHearts: function () {
+        const heartP = document.querySelector("#p1-hangman-tries > .remaining-tries");
+        this.totalHearts.splice(-1, 1);
+        heartP.textContent = this.totalHearts.join("");
+    },
+
+    numberOfGuesses: 0,
+    wrongGuesses: -1,
+    currentHangmanStage: 0,
+
+    /**
+     * Updates the hangman image based on number of wrong guesses.
+     * @param {string[]} hangmanArray - Array of hangman image paths.
+     */
+    updateHangman: function (hangmanArray) {
+        this.currentHangmanStage = hangmanArray[this.wrongGuesses];
+        const hangmanNode = document.querySelector("#p1-hangman");
+        hangmanNode.src = this.currentHangmanStage;
+    },
+
+    /** Resets the hangman image to the initial state */
+    resetHangman: function () {
+        const hangmanNode = document.querySelector("#p1-hangman");
+        hangmanNode.src = "./assets/img/hangman-stages/hangman-start.png";
+    },
+
+    pickedWord: "",
+    pickedWordArray: [],
+    blankSpacesArray: [],
+    alreadyGuessedLetters: [],
+
+    /** Updates the display with current blank letters and correct guesses */
+    updateBlanks: function () {
+        const newUnderscoreP = document.querySelector("#player1-section > .picked-word-div p");
+        newUnderscoreP.textContent = this.blankSpacesArray.join("");
+    },
+
+    /**
+     * Randomly selects a word from the given list and initializes tracking arrays.
+     * @param {string[]} listOfWords - Array of possible words to pick from.
+     */
+    pickWord: function (listOfWords) {
+        const pickedWordIndex = Math.floor((Math.random() * listOfWords.length));
+        this.pickedWord = listOfWords[pickedWordIndex].toUpperCase();
+        //Open the console to see which word was picked for this round
+        console.log(this.pickedWord);
+
+        //eg. from "BUBBLES" to ["B", "U", "B", "B", "L", "E", "S"]
+        this.pickedWordArray = this.pickedWord.split("");
+
+        //eg. from "YES" to ["_", "_", "_"]
+        this.blankSpacesArray = this.pickedWord.replace(/[A-Z]/gi, "_").split("");
+
+        //Updating the DOM with the "_"
+        this.updateBlanks();
+    },
+
+    /** Displays the most recent guessed letter in the DOM */
+    displayGuessedLetters: function () {
+        const previousPicksTitle = document.querySelector("#p1-guessed-letters-div > p");
+        const newP = document.createElement("p");
+        newP.textContent = this.alreadyGuessedLetters[this.alreadyGuessedLetters.length - 1];
+        previousPicksTitle.insertAdjacentElement("afterend", newP);
+    },
+
+    /** Clears all guessed letters and resets the UI list */
+    resetGuessedLetters: function () {
+        this.alreadyGuessedLetters = [];
+
+        const previousPicks = document.querySelectorAll("#p1-guessed-letters-div p");
+
+        // Skip the first <p> (which is the "Past Picks" title)
+        previousPicks.forEach((pElement, index) => {
+            if (index !== 0) {
+                pElement.remove();
+            }
+        });
+    },
+
+    /** Checks if the guessed letter is in the word and updates game state accordingly */
+    isInWord: function () {
+        const selectedLetter = this.alreadyGuessedLetters[this.alreadyGuessedLetters.length - 1];
+
+        if (this.pickedWordArray.indexOf(selectedLetter) !== -1) {
+            for (let index = 0; index < this.pickedWordArray.length; index++) {
+                if (selectedLetter === this.pickedWordArray[index]) {
+                    this.blankSpacesArray[index] = selectedLetter;
+                } else {
+                    continue;
+                }
+            }
+            this.updateBlanks();
+            this.msgToThePlayer(`GOTCHA, letter "${selectedLetter}" was caught!`);
+            this.didPlayerWin();
+        } else {
+            this.msgToThePlayer(`Oh no, the letter "${selectedLetter}" ran away!`);
+            this.removeHearts();
+            this.displayGuessedLetters();
+            this.wrongGuesses++;
+            this.updateHangman(hangmanStages);
+            this.didPlayerLose();
+        }
+    },
+
+    /** Checks if the player has won and updates the game state */
+    didPlayerWin: function () {
+        if (this.pickedWordArray.join("") === this.blankSpacesArray.join("")) {
+
+            this.msgToThePlayer("Victory! You gained +1 gym badges!");
+            this.giveAPoint();
+
+            const heartP = document.querySelector("#p1-hangman-tries > .remaining-tries");
+            heartP.textContent = "VICTORY";
+
+            disableAllInputs();
+            enableContinueBtn();
+        }
+    },
+
+    /** Checks if the player has lost and updates the game state */
+    didPlayerLose: function () {
+        if (this.wrongGuesses === 9) {
+            this.msgToThePlayer("Oh no, you lost! Want a rematch?");
+
+            //disables the input
+            document.querySelector("#player1-input").classList.add("disabled");
+            document.querySelector("#player1-input").disabled = true;
+
+            const heartP = document.querySelector("#p1-hangman-tries > .remaining-tries");
+            heartP.textContent = "DEFEAT";
+        }
+    }
+};
+
+//---------------------------------------------------------------------
+
+// Handles keyup events for Player 1's letter guesses.
+/**
+ * Processes keyboard input, checks for duplicates and valid letters,
+ * and triggers game logic accordingly.
+ * @param {KeyboardEvent} event - The keyup event triggered by user input.
+ */
+function handleP1Keyup(event) {
+
+    let pressedKey = event.key.toUpperCase();
+
+    //checks whether it's a letter or another key
+    if (/^[A-Z]$/i.test(pressedKey)) {
+        //checks whether it's the first time the player selects said letter
+        if (p1.alreadyGuessedLetters.includes(pressedKey)) {
+            p1.msgToThePlayer("You've already caught that letter!");
+        } else {
+            p1.alreadyGuessedLetters.push(pressedKey);
+            p1.isInWord();
+        }
+
+        //"Enter", "Shift", etc
+    } else if (/^.{2,}$/.test(pressedKey)) {
+        p1.msgToThePlayer("You pressed a forbidden key");
+    } else {
+        p1.msgToThePlayer("Not a letter!");
+    }
+    setTimeout(() => {
+        const inputFieldP1 = document.querySelector("#player1-input");
+        inputFieldP1.value = "";
+    }, 1000);
+}
+
+// Attach listener
+function registerP1Letters() {
+    const inputFieldP1 = document.querySelector("#player1-input");
+    inputFieldP1.addEventListener("keyup", handleP1Keyup);
+}
+
+// Detach and reattach listener
+function resetP1LetterHistory() {
+    const inputFieldP1 = document.querySelector("#player1-input");
+    inputFieldP1.removeEventListener("keyup", handleP1Keyup);
+    inputFieldP1.addEventListener("keyup", handleP1Keyup);
+}
+
+//---------------------------------------------------------------------
+// GAME SETUP SECTION
+
+// Starter Pokémon used as the word pool
+const starterPokemon = [
+    "Bulbasaur", "Charmander", "Squirtle",
+    "Chikorita", "Cyndaquil", "Totodile",
+    "Treecko", "Torchic", "Mudkip",
+    "Turtwig", "Chimchar", "Piplup",
+    "Snivy", "Tepig", "Oshawott",
+    "Chespin", "Fennekin", "Froakie",
+    "Rowlet", "Litten", "Popplio",
+    "Grookey", "Scorbunny", "Sobble",
+    "Sprigatito", "Fuecoco", "Quaxly"
+];
+
+// Event listener and logic for the "Continue" button
+const continueButton = document.getElementById("continue-button");
+continueButton.addEventListener("click", () => {
+    continueForSinglePlayer(p1);
+    disableContinueBtn();
+});
+
+/**
+ * Resets game state and selects a new word while preserving the player's score.
+ * @param {object} player1 - The player object to update.
+ */
+function continueForSinglePlayer(player1) {
+    player1.resetHearts();
+    player1.resetHangman();
+    player1.resetGuessedLetters();
+    resetP1LetterHistory();
+    player1.msgToThePlayer("Here we go again!");
+    player1.numberOfGuesses = 0;
+    player1.wrongGuesses = -1;
+    player1.pickWord(starterPokemon);
+    registerP1Letters();
+
+    enableAllInputs();
+}
+
+// Event listener and logic for the "Reset" button
+const resetButton = document.getElementById("reset-button");
+resetButton.addEventListener("click", () => {
+    resetForSinglePlayer(p1);
+});
+
+/**
+ * Fully resets the game state including score, hearts, and selected word.
+ * @param {object} player1 - The player object to reset.
+ */
+function resetForSinglePlayer(player1) {
+    player1.resetHearts();
+    player1.resetHangman();
+    player1.resetGuessedLetters();
+    resetP1LetterHistory();
+    player1.msgToThePlayer("Your Pokéball supply has been restored! Good luck!");
+    player1.resetScore();
+    player1.numberOfGuesses = 0;
+    player1.wrongGuesses = -1;
+    player1.pickWord(starterPokemon);
+    enableAllInputs();
+}
+
+// --------------------------------------------------------
+// Utility functions to control input field and button states
+
+function disableAllInputs() {
+    document.querySelector("#player1-input").disabled = true;
+}
+
+function enableAllInputs() {
+    document.querySelector("#player1-input").disabled = false;
+}
+
+function enableContinueBtn() {
+    document.querySelector("#continue-button").disabled = false;
+}
+
+function disableContinueBtn() {
+    document.querySelector("#continue-button").disabled = true;
+}
+
+// --------------------------------------------------------
+
+// Initial game setup: sets player name, displays game, and starts the first round
+const gameStartButton = document.getElementById("game-start-button");
+gameStartButton.addEventListener("click", () => {
+    p1.setName();
+    document.getElementById("game-section").classList.remove("hidden");
+    document.getElementById("start-screen").classList.add("hidden");
+    disableContinueBtn();
+    p1.resetHearts();
+    p1.pickWord(starterPokemon);
+    registerP1Letters();
+});
