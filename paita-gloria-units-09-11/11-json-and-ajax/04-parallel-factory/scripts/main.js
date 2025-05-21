@@ -241,8 +241,8 @@ window.onload = function () {
 // Instantiate a new request for the cars
 let carsArray = [];
 
-const car01Endpoint = "http://jsonblob.com/api/jsonBlob/1374118226572795904";
-const car02Endpoint = "http://jsonblob.com/api/jsonBlob/1374118447876857856";
+const car01Endpoint = "https://jsonblob.com/api/jsonBlob/1374118226572795904";
+const car02Endpoint = "https://jsonblob.com/api/jsonBlob/1374118447876857856";
 const car03Endpoint = "https://jsonblob.com/api/jsonBlob/1374118559613116416";
 const car04Endpoint = "https://jsonblob.com/api/jsonBlob/1374118653330644992";
 const car05Endpoint = "https://jsonblob.com/api/jsonBlob/1374118770653716480";
