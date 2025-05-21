@@ -17,6 +17,7 @@
  * @param {string} btnText - The label to display on the button.
  * @param {string} btnClass - The class to assign to the button.
  * @param {HTMLElement} btnWhereToAppend - The parent element to which the new <li> will be appended.
+ * @returns {void}
  */
 function createButtonInLi(btnText, btnClass, btnWhereToAppend) {
     const btnLi = document.createElement("li");
@@ -32,6 +33,7 @@ function createButtonInLi(btnText, btnClass, btnWhereToAppend) {
  * Renders the factory object as a nested list in the UI.
  *
  * @function displayFactory
+ * @returns {void}
  */
 function displayFactory() {
 
@@ -55,13 +57,11 @@ function displayFactory() {
                 subLi.textContent = `${subKey}: ${value[subKey]}`;
                 subUl.appendChild(subLi);
             }
-
             li.appendChild(subUl); // Append sublist to the parent <li>
 
         } else {
             li.textContent = `${key}: ${value}`;
         }
-
         factoryUl.appendChild(li);
     }
 
@@ -73,6 +73,7 @@ function displayFactory() {
  * Renders the list of cars in the UI with collapsible sections and an edit button for each car.
  *
  * @function displayCars
+ * @returns {void}
  */
 function displayCars() {
 
@@ -158,7 +159,6 @@ function displayCars() {
         car.details = carContent;
 
         carTitle.addEventListener("click", () => toggleAccordion(car));
-
     });
 }
 
@@ -187,6 +187,7 @@ function getNextSiblings(element, count) {
  *
  * @function toggleAccordion
  * @param {Object} car - The car object whose UI section is being toggled.
+ * @returns {void}
  */
 function toggleAccordion(car) {
 
@@ -227,6 +228,7 @@ function toggleAccordion(car) {
  * Attaches input listeners to all editable car fields to update the local data model when changed.
  *
  * @function recordInputs
+ * @returns {void}
  */
 function recordInputs() {
     const allEditableFields = document.getElementsByClassName("value");
@@ -256,6 +258,7 @@ function recordInputs() {
  * Adds or removes the "edit-mode" style and contentEditable attribute.
  *
  * @function toggleEditingMode
+ * @returns {void}
  */
 function toggleEditingMode() {
 
@@ -278,25 +281,22 @@ function toggleEditingMode() {
                 btn.textContent = isEditing ? "Save and Exit" : "Edit";
             });
 
-            // For each car section, toggle its fields
-            Array.from(allEditBtns).forEach(btn => {
+            const carUl = button.closest("ul");
 
-                const carUl = button.closest("ul");
+            const editableFields = carUl.querySelectorAll("p.value");
+            editableFields.forEach(p => {
+                p.contentEditable = isEditing;
 
-                const editableFields = carUl.querySelectorAll("p.value");
-                editableFields.forEach(p => {
-                    p.contentEditable = isEditing;
-
-                    if (isEditing) {
-                        p.classList.add("edit-mode");
-                    } else {
-                        p.classList.remove("edit-mode");
-                    }
-                });
+                if (isEditing) {
+                    p.classList.add("edit-mode");
+                } else {
+                    p.classList.remove("edit-mode");
+                }
             });
         });
     });
 }
+
 
 /**
  * Updates the local car object with a new value from the UI.
@@ -306,6 +306,7 @@ function toggleEditingMode() {
  * @param {number} carIndex - The index of the car in the carsArray.
  * @param {string} key - The property name to update.
  * @param {string} value - The new value to assign.
+ * @returns {void}
  */
 function updateJsonObjectValues(carIndex, key, value) {
     const car = carsArray[carIndex];
@@ -378,6 +379,7 @@ function cleanFactoryCopy(factoryObj) {
  *
  * @function showError
  * @param {string} message - The error message to display.
+ * @returns {void}
  */
 function showError(message) {
     const errorDiv = document.getElementById("error-message");
@@ -402,6 +404,7 @@ let factoryObject;
  * Displays an error message if the request fails or returns invalid JSON.
  *
  * @function getFactoryRequest
+ * @returns {void}
  */
 function getFactoryRequest() {
     const factoryRequest = new XMLHttpRequest();
@@ -422,7 +425,6 @@ function getFactoryRequest() {
 
 getFactoryRequest();
 
-
 // Instantiate a new request for the cars
 let carsArray;
 const carsEndpoint = "https://jsonblob.com/api/jsonBlob/1372887680802807808";
@@ -433,6 +435,7 @@ const carsEndpoint = "https://jsonblob.com/api/jsonBlob/1372887680802807808";
  * Displays an error message if the request fails or returns invalid JSON.
  *
  * @function carsGetRequest
+ * @returns {void}
  */
 function carsGetRequest() {
     const carsRequest = new XMLHttpRequest();
@@ -464,6 +467,7 @@ carsGetRequest();
  * Intended to be called after a save operation completes.
  *
  * @function fetchAndDisplayFactory
+ * @returns {void}
  */
 function fetchAndDisplayFactory() {
     const factoryRequest = new XMLHttpRequest();
@@ -502,6 +506,7 @@ function fetchAndDisplayFactory() {
  * Intended to be called after a save operation completes.
  *
  * @function fetchAndDisplayCars
+ * @returns {void}
  */
 function fetchAndDisplayCars() {
     const carsRequest = new XMLHttpRequest();
@@ -517,7 +522,7 @@ function fetchAndDisplayCars() {
                 showError("Data parsing error: invalid JSON structure.");
                 return;
             }
-            
+
             // Clear the current list before redisplaying
             const carsList = document.getElementById("cars-list");
             carsList.innerHTML = "";
@@ -546,6 +551,7 @@ function fetchAndDisplayCars() {
  * Saves both car and factory data to their respective blobs by calling the individual save functions.
  *
  * @function saveAllChangesToBlob
+ * @returns {void}
  */
 function saveAllChangesToBlob() {
 
@@ -559,6 +565,7 @@ function saveAllChangesToBlob() {
  * Handles success and failure scenarios with feedback to the user.
  *
  * @function saveCarsChangesToBlob
+ * @returns {void}
  */
 function saveCarsChangesToBlob() {
     const carsPostRequest = new XMLHttpRequest();
@@ -592,6 +599,7 @@ function saveCarsChangesToBlob() {
  * Handles success and failure scenarios with feedback to the user.
  *
  * @function saveFactoryChangesToBlob
+ * @returns {void}
  */
 function saveFactoryChangesToBlob() {
     const factoryPostRequest = new XMLHttpRequest();

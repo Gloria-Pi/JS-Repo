@@ -1,0 +1,22 @@
+{
+    "model": "Thunderbolt",
+    "make": "Pikachu Motors",
+    "year": 2018,
+    "price": 18000,
+    "isElectric": true,
+    "features": [
+        "Bluetooth",
+        "Remote Start",
+        "Backup Camera",
+        "Heated Seats"
+    ],
+    "insurance": {
+        "company": "Kanto Insurance",
+        "policyNumber": "KA234567890",
+        "expiryDate": "2025-04-10",
+        "isPaid": true
+    },
+    "previousOwners": null,
+    "mileage": 0,
+    "carId": "car01"
+}

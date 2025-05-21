@@ -21,11 +21,13 @@
 # Approach to Solution
 
 1. **JSON Creation**
-    - **`cars`**: An array of car objects, each containing properties such as `make`, `model`, `year`, `price`, `features`, and `insurance`.
+    - **`cars`**: An array of car objects, each containing properties such as `make`, `model`, `year`, `price`, `features`, `carId` and `insurance`.
+
     - **`factory`**: A single object representing the factory, including details like `name`, `location`, `facilities`, and a list of associated car IDs.
+
     - Example of defining the JSON strings:
         ```js
-        let cars = `[
+        const cars = `[
             {
                 "carId": "car01",
                 "make": "Pikachu Motors",
@@ -45,14 +47,17 @@
             }
         ]`;
         ```
-
+  <br>
+  
 2. **Parsing JSON**
     - `JSON.parse()` is used to convert both JSON strings into JavaScript objects:
         ```js
-        cars = JSON.parse(cars);
-        factory = JSON.parse(factory);
+        const carsObject = JSON.parse(cars);
+        const factoryObject = JSON.parse(factory);
         ```
     - This allows the data to be manipulated and rendered dynamically in the DOM.
+
+<br>
 
 3. **DOM Rendering**
    - **Cars Array**:
@@ -66,6 +71,7 @@
         ```js
         headerNode.insertAdjacentElement("afterend", singleCarUl);
         ```
+<br>
 
 4. **CSS Styling**
    - To remove bullet points from the lists:
@@ -75,13 +81,15 @@
         }
         ```
 
-
+<br>
 
 ## Example Output
 
 Each car and the factory will appear on the page as its own `<ul>` block with each key/value pair listed.
 
 Nested objects like `insurance` are shown as sublists.
+
+<br>
 
 ### Example Structure:
 ```html
@@ -105,3 +113,11 @@ Nested objects like `insurance` are shown as sublists.
   <li>mileage: 0</li>
 </ul>
 ```
+
+<br>
+
+## Why I Haven’t Used hasOwnProperty()
+
+In this code, I’ve chosen not to use `hasOwnProperty()` because I’m confident that the objects being processed don’t have any *inherited properties*. The objects are plain objects, and I control their structure, so there’s no risk of including unwanted properties from prototypes.
+
+However, while it’s not necessary in the current context, implementing `hasOwnProperty()` would be useful in the future. If the structure of these objects changes, or if new objects are introduced from external sources or libraries, using `hasOwnProperty()` ensures the code will correctly handle only the object's own properties, avoiding any potential issues from prototype inheritance.

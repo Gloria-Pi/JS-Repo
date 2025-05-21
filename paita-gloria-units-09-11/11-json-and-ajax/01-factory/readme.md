@@ -25,7 +25,6 @@
 
 # Approach to Solution  
 
-
 # Car & Factory JSON Structure
 
 This project defines a simple data model for representing cars and car factories using JSON.
@@ -55,7 +54,7 @@ This file can be used as a template or building block for creating car inventori
 
 ## Factory JSON Files
 
-### `factory1.json` – **Embedded Car Data**
+### `factory-embedded.json` – **Embedded Car Data**
 - This file contains the full **car objects embedded directly** within the factory.
 - All car information is stored inline under the `cars` property.
 - **Advantages**:
@@ -68,19 +67,50 @@ This file can be used as a template or building block for creating car inventori
 #### Structure:
 ```json
 {
-  "name": "...",
-  "location": "...",
-  ...
-  "cars": [
-    { /* full car object */ },
-    { /* full car object */ },
-    ...
-  ]
+    "name": "RocketFueled Car Lab",
+    "location": "Spaceport City, Alola",
+    "establishedYear": 2012,
+    "isOperating": true,
+    "totalEmployees": 1080,
+    "annualRevenue": 48000000,
+    "facilities": {
+        "assemblyLine": "The HyperLoop",
+        "paintShop": "ColorBlaster 5000",
+        "qualityControl": "The TestZone"
+    },
+    "motto": "We don’t just make cars, we make history!",
+    "cars": [
+        {
+            "carId": "car01",
+            "make": "Pikachu Motors",
+            "model": "Thunderbolt",
+            "year": 2018,
+            "price": 18000,
+            "isElectric": true,
+            "features": [
+                "Bluetooth",
+                "Remote Start",
+                "Backup Camera",
+                "Heated Seats"
+            ],
+            "insurance": {
+                "company": "Kanto Insurance",
+                "policyNumber": "KA234567890",
+                "expiryDate": "2025-04-10",
+                "isPaid": true
+            },
+            "previousOwners": null,
+            "mileage": 0
+        },
+        (...)
+        }
+    ]
 }
+
 ```
 <br>
 
-### `factory2.json` – **Car ID References**
+### `factory-id.json` – **Car ID References**
 - Instead of embedding full car data, this file stores only a list of car IDs under the carIds property.  
 - The car data is assumed to live separately (e.g., in cars.json or a database).
 
@@ -99,9 +129,24 @@ This file can be used as a template or building block for creating car inventori
 #### Structure:
 ```json
 {
-  "name": "...",
-  "location": "...",
-  ...
-  "carIds": ["car01", "car02", "car03", ...]
+    "name": "RocketFueled Car Lab",
+    "location": "Spaceport City, Alola",
+    "establishedYear": 2012,
+    "isOperating": true,
+    "totalEmployees": 1080,
+    "annualRevenue": 48000000,
+    "facilities": {
+        "assemblyLine": "The HyperLoop",
+        "paintShop": "ColorBlaster 5000",
+        "qualityControl": "The TestZone"
+    },
+    "motto": "We don’t just make cars, we make history!",
+    "carIds": [
+        "car01",
+        "car02",
+        "car03",
+        "car04",
+        "car05"
+    ]
 }
 ```

@@ -146,7 +146,7 @@ Key features of this function include:
 * Dynamic handling of primitive values, arrays, `null`, and nested objects.
 * For nested objects, the script uses nested lists inside each `<li>`, and properly labels them using paired `<p>` elements with styling classes.
 
-This structure ensures all car details are visible immediately, without toggles or hidden panels, as per assignment specs.
+This structure ensures all car details are visible immediately, without toggles or hidden panels.
 
 <br>
 
@@ -169,3 +169,11 @@ CSS classes are used to toggle visibility instead of inline styles or `!importan
 - Each car listed with its details, including nested object properties fully expanded.
 - Loading message visible on start, disappearing on complete load.
 - Error message visible if any data fails to load or parse.
+
+<br>
+
+## Why I Haven’t Used hasOwnProperty()
+
+In this code, I’ve chosen not to use `hasOwnProperty()` because I’m confident that the objects being processed don’t have any *inherited properties*. The objects are plain objects, and I control their structure, so there’s no risk of including unwanted properties from prototypes.
+
+However, while it’s not necessary in the current context, implementing `hasOwnProperty()` would be useful in the future. If the structure of these objects changes, or if new objects are introduced from external sources or libraries, using `hasOwnProperty()` ensures the code will correctly handle only the object's own properties, avoiding any potential issues from prototype inheritance.

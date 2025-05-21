@@ -1,0 +1,303 @@
+* {
+    box-sizing: border-box;
+}
+
+/* RESETTING THE DEFAULTS */
+
+/*
+html5doctor.com Reset Stylesheet
+v1.6.1
+Last Updated: 2010-09-17
+Author: Richard Clark - http://richclarkdesign.com
+Twitter: @rich_clark
+*/
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    line-height: 1;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+nav ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+a {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color: #ff9;
+    color: #000;
+    text-decoration: none;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color: #ff9;
+    color: #000;
+    font-style: italic;
+    font-weight: bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title],
+dfn[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #cccccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+input,
+select {
+    vertical-align: middle;
+}
+
+/* ------- BEGINNING OF PERSONAL CSS RULES ------- */
+
+html,
+body {
+    height: 100%;
+    font-size: 62.5%;
+    /* 62.5% of 16px = 10px */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+body {
+    font-size: 1.6rem;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 10vh;
+    background-color: black;
+    color: whitesmoke;
+}
+
+header,
+footer {
+    text-align: center;
+    padding: 10px 0;
+}
+
+footer {
+    margin-top: auto;
+    width: 100%;
+    min-height: 5vh;
+    background-color: black;
+    color: whitesmoke;
+    line-height: 5vh;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: lighter;
+}
+
+ul {
+    padding: 15px 35px;
+    list-style: none;
+}
+
+li ul {
+    padding: 0 25px;
+}
+
+li {
+    line-height: 23px;
+}
+
+hr {
+    width: 80vw;
+    margin-left: 25px;
+    border-radius: 30px;
+    border-width: 3px;
+    border-color: rgb(100, 118, 237);
+}
+
+#error-message{
+    color: red;
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#loading-message{
+    color: rgb(0, 106, 255);
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    padding: 10px;
+}
+
+#loading-message.showDiv {
+    display: block;
+}
+
+#factory,
+#cars-list {
+    padding: 20px 0;
+}
+
+#factory>ul>li:first-child {
+    background-color: rgb(164, 194, 252);
+    padding: 15px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#factory>ul>li:not(:first-child) {
+    padding: 3px 20px;
+}
+
+.title {
+    border-radius: 15px 0 0 0;
+    transition: background-color ease 0.4s;
+    background-color: rgb(184, 209, 255);
+    padding: 15px;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.content {
+    overflow: hidden;
+    background-color: rgb(227, 236, 252);
+    font-style: italic;
+    color: rgb(39, 39, 39);
+    padding: 5px 30px;
+}

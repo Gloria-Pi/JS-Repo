@@ -11,7 +11,7 @@
  * @constant {string} cars
  * @description A JSON string representing an array of car objects.
  */
-let cars = `[
+const cars = `[
     {
         "carId": "car01",
         "make": "Pikachu Motors",
@@ -134,7 +134,7 @@ let cars = `[
  * @constant {string} factory
  * @description A JSON string representing the factory details.
  */
-let factory = `{
+const factory = `{
     "name": "RocketFueled Car Lab",
     "location": "Spaceport City, Alola",
     "establishedYear": 2012,
@@ -156,13 +156,23 @@ let factory = `{
     ]
 }`;
 
-// Parse the JSON strings into JavaScript objects
-cars = JSON.parse(cars);
-factory = JSON.parse(factory);
+/**
+ * Parses the cars and factory JSON strings into JavaScript objects.
+ * @constant {Object[]} carsObject - Array of car objects.
+ * @constant {Object} factoryObject - Factory details object.
+ */
+const carsObject = JSON.parse(cars);
+const factoryObject = JSON.parse(factory);
 
+// Selects the <header> element in the DOM.
 const headerNode = document.querySelector("header");
 
-cars.forEach(car => {
+/**
+ * Iterates over each car object, creates a nested HTML list for each car's properties,
+ * and appends it to the DOM after the <header> element.
+ * Handles nulls, arrays, and nested objects.
+ */
+carsObject.forEach(car => {
     const singleCarUl = document.createElement("ul");
 
     for (const key in car) {
@@ -186,13 +196,13 @@ cars.forEach(car => {
                 subLi.textContent = `${subKey}: ${value[subKey]}`;
                 subUl.appendChild(subLi);
             }
-            
+
             li.appendChild(subUl); // Append sublist to the parent <li>
 
         } else {
             li.textContent = `${key}: ${value}`;
-        }
 
+        }
         singleCarUl.appendChild(li);
     }
 
@@ -200,15 +210,16 @@ cars.forEach(car => {
     headerNode.insertAdjacentElement("afterend", singleCarUl);
 });
 
-
-
-
 const factoryUl = document.createElement("ul");
 headerNode.insertAdjacentElement("afterend", factoryUl);
 
-for (const key in factory) {
+/**
+ * Creates an HTML list for the factory object, including nested lists for object properties,
+ * and appends it to the DOM after the <header> element.
+ */
+for (const key in factoryObject) {
     const li = document.createElement("li");
-    let value = factory[key];
+    let value = factoryObject[key];
 
     // Handle different types of values
     if (value === null) {
@@ -224,13 +235,11 @@ for (const key in factory) {
             subLi.textContent = `${subKey}: ${value[subKey]}`;
             subUl.appendChild(subLi);
         }
-
         li.appendChild(subUl); // Append sublist to the parent <li>
 
     } else {
         li.textContent = `${key}: ${value}`;
     }
-
     factoryUl.appendChild(li);
 }
 

@@ -1,25 +1,61 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file main.js
  * @author Gloria Paita
  * 
  * @description
+ * This script manages a car factory web application using data stored remotely on JSONBlob.
+ * It supports displaying factory and car data, editing car information, saving updates via HTTP PUT requests,
+ * handling user interaction through a dynamic UI, and reporting any errors that occur during data operations.
+ * 
+ * For this exercise, the Fetch API is used instead of XMLHttpRequest for all HTTP requests.
  */
+
 
 // HELPERS FUNCTIONS - SETTING UP THE PAGE -----------------------------------------------------------------
 
 /**
- * Creates a <button> inside a <li> element and appends it to a given container.
+ * Creates a &lt;button> inside a &lt;li> element and appends it to a given container.
  *
  * @function createButtonInLi
  * @param {string} btnText - The label to display on the button.
  * @param {string} btnClass - The class to assign to the button.
- * @param {HTMLElement} btnWhereToAppend - The parent element to which the new <li> will be appended.
+ * @param {HTMLElement} btnWhereToAppend - The parent element to which the new &lt;li> will be appended.
+ * @returns {void}
  */
 function createButtonInLi(btnText, btnClass, btnWhereToAppend) {
     const btnLi = document.createElement("li");
     const newBtn = document.createElement("button");
     newBtn.textContent = btnText;
     newBtn.setAttribute("class", btnClass);
+    newBtn.classList.add("accordion-content");
     btnLi.appendChild(newBtn);
     btnWhereToAppend.appendChild(btnLi);
 }
@@ -28,6 +64,7 @@ function createButtonInLi(btnText, btnClass, btnWhereToAppend) {
  * Renders the factory object as a nested list in the UI.
  *
  * @function displayFactory
+ * @returns {void}
  */
 function displayFactory() {
 
@@ -51,13 +88,11 @@ function displayFactory() {
                 subLi.textContent = `${subKey}: ${value[subKey]}`;
                 subUl.appendChild(subLi);
             }
-
-            li.appendChild(subUl); // Append sublist to the parent <li>
+            li.appendChild(subUl); // Append sublist to the parent &lt;li>
 
         } else {
             li.textContent = `${key}: ${value}`;
         }
-
         factoryUl.appendChild(li);
     }
 
@@ -69,6 +104,7 @@ function displayFactory() {
  * Renders the list of cars in the UI with collapsible sections and an edit button for each car.
  *
  * @function displayCars
+ * @returns {void}
  */
 function displayCars() {
 
@@ -98,7 +134,7 @@ function displayCars() {
 
             } else if (typeof value === "object") {
 
-                // Create a nested <ul> for object properties
+                // Create a nested &lt;ul> for object properties
                 const subUl = document.createElement("ul");
                 li.appendChild(keyP);
 
@@ -118,7 +154,7 @@ function displayCars() {
                     subUl.appendChild(subLi);
                 }
 
-                li.appendChild(subUl); // Append sublist to the parent <li>
+                li.appendChild(subUl); // Append sublist to the parent &lt;li>
 
             } else {
                 valueP.textContent = value;
@@ -132,26 +168,28 @@ function displayCars() {
         //Appends the edit button
         createButtonInLi("Edit", "edit-btn", singleCarUl);
 
-        // Append the car's <ul> to the DOM in the "cars-list" div
+        // Append the car's &lt;ul> to the DOM in the "cars-list" div
         const carsList = document.getElementById("cars-list");
         carsList.appendChild(singleCarUl);
 
-        // Sets the class "title" to the first <li>
+        // Sets the class "accordion-title" to the first &lt;li>
         const carTitle = singleCarUl.querySelector("li:first-child");
-        carTitle.classList.add("title");
+        carTitle.classList.add("accordion-title");
 
-        // Sets the class content to the rest of the <li>s
+        // Sets the class accordion-content to the rest of the &lt;li>s
         const carContent = Array.from(singleCarUl.children).slice(1);
         carContent.forEach(infoPiece => {
-            infoPiece.classList.add("content");
+            infoPiece.classList.add("accordion-content");
+            infoPiece.style.display = "none"; // Initially hidden
         });
 
         // Store the car title in the car object for future updates
         car.title = carTitle;
 
-        // Store the detail <li>s in the car object for future reference
+        // Store the detail &lt;li>s in the car object for future reference
         car.details = carContent;
 
+        carTitle.addEventListener("click", () => toggleAccordion(car));
     });
 }
 
@@ -167,7 +205,7 @@ function getNextSiblings(element, count) {
     const result = [];
     let current = element.nextElementSibling;
 
-    while (current && result.length < count) {
+    while (current &amp;&amp; result.length &lt; count) {
         result.push(current);
         current = current.nextElementSibling;
     }
@@ -175,29 +213,71 @@ function getNextSiblings(element, count) {
     return result;
 }
 
+/**
+ * Toggles the visibility of a car's detail panel while closing any other open panels.
+ *
+ * @function toggleAccordion
+ * @param {Object} car - The car object whose UI section is being toggled.
+ * @returns {void}
+ */
+function toggleAccordion(car) {
+
+    // Close all other open accordion titles
+    const allTitles = document.querySelectorAll(".accordion-title");
+
+    allTitles.forEach(title => {
+        if (title !== car.title &amp;&amp; title.classList.contains("active")) {
+            title.classList.remove("active");
+
+            const everyInfo = getNextSiblings(title, 10);
+
+            everyInfo.forEach(infoPiece => {
+
+                if (infoPiece &amp;&amp; infoPiece.classList.contains("accordion-content")) {
+                    infoPiece.style.display = "none";
+                }
+
+            })
+        }
+    });
+
+    // Toggle the clicked title
+    const carInfo = car.details;
+
+    carInfo.forEach(info => {
+        if (info.style.display === "none") {
+            car.title.classList.add("active");
+            info.style.display = "";
+        } else {
+            car.title.classList.remove("active");
+            info.style.display = "none";
+        }
+    });
+}
 
 /**
  * Attaches input listeners to all editable car fields to update the local data model when changed.
  *
  * @function recordInputs
+ * @returns {void}
  */
 function recordInputs() {
     const allEditableFields = document.getElementsByClassName("value");
 
     Array.from(allEditableFields).forEach(field => {
         field.addEventListener("input", () => {
-            // Get the key from the previous sibling <p class="key">
+            // Get the key from the previous sibling &lt;p class="key">
             const key = field.previousElementSibling.textContent.replace(":", "").trim();
             const value = field.textContent.trim();
 
-            // Finds the parent <ul> for the current car
+            // Finds the parent &lt;ul> for the current car
             const carUl = field.closest("ul");
 
-            // Finds its index within all car <ul>s
+            // Finds its index within all car &lt;ul>s
             const allCarUls = Array.from(document.getElementById("cars-list").children);
             const carIndex = allCarUls.indexOf(carUl);
 
-            if (carIndex !== -1 && key) {
+            if (carIndex !== -1 &amp;&amp; key) {
                 updateJsonObjectValues(carIndex, key, value);
             }
         });
@@ -209,6 +289,7 @@ function recordInputs() {
  * Adds or removes the "edit-mode" style and contentEditable attribute.
  *
  * @function toggleEditingMode
+ * @returns {void}
  */
 function toggleEditingMode() {
 
@@ -231,25 +312,22 @@ function toggleEditingMode() {
                 btn.textContent = isEditing ? "Save and Exit" : "Edit";
             });
 
-            // For each car section, toggle its fields
-            Array.from(allEditBtns).forEach(btn => {
+            const carUl = button.closest("ul");
 
-                const carUl = button.closest("ul");
+            const editableFields = carUl.querySelectorAll("p.value");
+            editableFields.forEach(p => {
+                p.contentEditable = isEditing;
 
-                const editableFields = carUl.querySelectorAll("p.value");
-                editableFields.forEach(p => {
-                    p.contentEditable = isEditing;
-
-                    if (isEditing) {
-                        p.classList.add("edit-mode");
-                    } else {
-                        p.classList.remove("edit-mode");
-                    }
-                });
+                if (isEditing) {
+                    p.classList.add("edit-mode");
+                } else {
+                    p.classList.remove("edit-mode");
+                }
             });
         });
     });
 }
+
 
 /**
  * Updates the local car object with a new value from the UI.
@@ -259,6 +337,7 @@ function toggleEditingMode() {
  * @param {number} carIndex - The index of the car in the carsArray.
  * @param {string} key - The property name to update.
  * @param {string} value - The new value to assign.
+ * @returns {void}
  */
 function updateJsonObjectValues(carIndex, key, value) {
     const car = carsArray[carIndex];
@@ -286,8 +365,8 @@ function updateJsonObjectValues(carIndex, key, value) {
         // check nested objects
         for (const nestedKey in car) {
             if (
-                typeof car[nestedKey] === "object" &&
-                car[nestedKey] !== null &&
+                typeof car[nestedKey] === "object" &amp;&amp;
+                car[nestedKey] !== null &amp;&amp;
                 key in car[nestedKey]
             ) {
                 car[nestedKey][key] = value;
@@ -324,13 +403,14 @@ function cleanFactoryCopy(factoryObj) {
     return JSON.parse(JSON.stringify(factoryObj));
 }
 
-//ERRORS -------------------------------------------------------------------------
+//ERRORS ------------------------------------------------------------------------------------------------------
 
 /**
  * Displays an error message in the UI for a limited time.
  *
  * @function showError
  * @param {string} message - The error message to display.
+ * @returns {void}
  */
 function showError(message) {
     const errorDiv = document.getElementById("error-message");
@@ -344,7 +424,7 @@ function showError(message) {
     }, 8000);
 }
 
-//GET --------------------------------------------------------------------------
+//GET ----------------------------------------------------------------------------------------------------------
 
 // Instantiate a new request for the factory
 const factoryEndpoint = "https://jsonblob.com/api/jsonBlob/1372889222368911360";
@@ -355,99 +435,121 @@ let factoryObject;
  * Displays an error message if the request fails or returns invalid JSON.
  *
  * @function getFactoryRequest
+ * @returns {void}
  */
 function getFactoryRequest() {
-    const factoryRequest = new XMLHttpRequest();
-
-    factoryRequest.addEventListener("load", function () {
-        // Parse the JSON string into a JavaScript object
-        try {
-            factoryObject = JSON.parse(factoryRequest.responseText);
-        } catch (e) {
-            showError("Data parsing error on factoryObject: invalid JSON structure.");
-            return;
-        }
-        displayFactory();
-        carsGetRequest(); // Starts loading cars after factory is ready
-    });
-    factoryRequest.open("GET", factoryEndpoint);
-    factoryRequest.send();
+    fetch(factoryEndpoint)
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Failed to fetch factory data.");
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            factoryObject = data;
+            displayFactory();
+        })
+        .catch(function (error) {
+            showError(error.message);
+        });
 }
 
 getFactoryRequest();
 
-
 // Instantiate a new request for the cars
-let carsArray = [];
-
-const car01Endpoint = "http://jsonblob.com/api/jsonBlob/1374118226572795904";
-const car02Endpoint = "http://jsonblob.com/api/jsonBlob/1374118447876857856";
-const car03Endpoint = "https://jsonblob.com/api/jsonBlob/1374118559613116416";
-const car04Endpoint = "https://jsonblob.com/api/jsonBlob/1374118653330644992";
-const car05Endpoint = "https://jsonblob.com/api/jsonBlob/1374118770653716480";
-
-const carsEndpoints = [car01Endpoint, car02Endpoint, car03Endpoint, car04Endpoint, car05Endpoint];
-
-
-function carsGetRequest() {
-    let loadedCars = 0;
-
-    carsEndpoints.forEach((carEndpoint, index) => {
-        const singleCarRequest = new XMLHttpRequest();
-
-        singleCarRequest.addEventListener("load", function () {
-            try {
-                const carData = JSON.parse(singleCarRequest.responseText);
-                carsArray[index] = carData;
-            } catch (e) {
-                console.error(`Failed to parse car at index ${index}:`, singleCarRequest.responseText);
-
-                showError("Data parsing error on carData: invalid JSON structure.");
-                return;
-            }
-
-            loadedCars++;
-
-            // When all requests are done
-            if (loadedCars === carsEndpoints.length) {
-                displayCars();
-                recordInputs();
-                toggleEditingMode();
-            }
-        });
-
-        singleCarRequest.addEventListener("error", function () {
-            showError("Network error while loading car data.");
-        });
-
-        singleCarRequest.open("GET", carEndpoint);
-        singleCarRequest.send();
-    });
-}
-
+let carsArray;
+const carsEndpoint = "https://jsonblob.com/api/jsonBlob/1372887680802807808";
 
 /**
- * Re-fetches and re-renders the car lists from the blobs.
+ * Fetches car data from the JSONBlob endpoint and renders it in the DOM.
+ * Sets up editing and input tracking after rendering.
+ * Displays an error message if the request fails or returns invalid JSON.
+ *
+ * @function carsGetRequest
+ * @returns {void}
+ */
+function carsGetRequest() {
+    fetch(carsEndpoint)
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Failed to fetch car data.");
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            carsArray = data;
+            displayCars();
+            recordInputs();
+            toggleEditingMode();
+        })
+        .catch(function (error) {
+            showError(error.message);
+        });
+}
+
+carsGetRequest();
+
+/**
+ * Re-fetches and re-renders the factory data from the blob.
+ * Intended to be called after a save operation completes.
+ *
+ * @function fetchAndDisplayFactory
+ * @returns {void}
+ */
+function fetchAndDisplayFactory() {
+    fetch(factoryEndpoint)
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Failed to fetch updated factory data.");
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            factoryObject = data;
+            const factoryDiv = document.getElementById("factory");
+            factoryDiv.innerHTML = ""; // Clear previous data
+            displayFactory();
+        })
+        .catch(function (error) {
+            showError(error.message);
+        });
+}
+
+/**
+ * Re-fetches and re-renders the car list from the blob.
  * Intended to be called after a save operation completes.
  *
  * @function fetchAndDisplayCars
+ * @returns {void}
  */
 function fetchAndDisplayCars() {
-    // Clear old list
-    const carsList = document.getElementById("cars-list");
-    carsList.innerHTML = "";
-
-    // Reset and re-fetch all cars
-    carsArray = [];
-    carsGetRequest(); // This now includes display, inputs, edit mode
+    fetch(carsEndpoint)
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Failed to fetch updated car data.");
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            carsArray = data;
+            const carsList = document.getElementById("cars-list");
+            carsList.innerHTML = ""; // Clear current list before redisplaying
+            displayCars();
+            recordInputs();
+            toggleEditingMode();
+        })
+        .catch(function (error) {
+            showError(error.message);
+        });
 }
 
-//POST --------------------------------------------------------------------
+//POST ----------------------------------------------------------------------------------------------------------
 
 /**
  * Saves both car and factory data to their respective blobs by calling the individual save functions.
  *
  * @function saveAllChangesToBlob
+ * @returns {void}
  */
 function saveAllChangesToBlob() {
 
@@ -457,66 +559,81 @@ function saveAllChangesToBlob() {
 }
 
 /**
- * Sends updated car data to the cars blobs using a PUT request.
+ * Sends updated car data to the cars blob using a PUT request.
  * Handles success and failure scenarios with feedback to the user.
  *
  * @function saveCarsChangesToBlob
+ * @returns {void}
  */
 function saveCarsChangesToBlob() {
-    const cleanCars = cleanCarArrayCopy(carsArray);
+    const clearCarJsonCopy = JSON.stringify(cleanCarArrayCopy(carsArray));
 
-    cleanCars.forEach((carData, index) => {
-        const request = new XMLHttpRequest();
-
-        request.open("PUT", carsEndpoints[index]);
-        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-        request.onload = () => {
-            if (request.status !== 200 && request.status !== 201) {
-                console.error(`Car ${index + 1} save failed:`, request.statusText);
-                showError(`Car ${index + 1} save failed: ${request.statusText}`);
+    fetch(carsEndpoint, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        body: clearCarJsonCopy
+    })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Failed to save car data.");
             }
-        };
-
-        request.onerror = () => {
-            console.error(`Network error while saving car ${index + 1}`);
-            showError(`Network error while saving car ${index + 1}`);
-        };
-
-        request.send(JSON.stringify(carData));
-    });
-
-    // Optionally refresh the UI after all saves (with slight delay)
-    setTimeout(fetchAndDisplayCars, 1000);
+            console.log("Cars data saved successfully.");
+            fetchAndDisplayCars();
+        })
+        .catch(function (error) {
+            showError(error.message);
+        });
 }
-
 
 /**
  * Sends updated factory data to the factory blob using a PUT request.
  * Handles success and failure scenarios with feedback to the user.
  *
  * @function saveFactoryChangesToBlob
+ * @returns {void}
  */
 function saveFactoryChangesToBlob() {
-    const factoryPostRequest = new XMLHttpRequest();
-    factoryPostRequest.open("PUT", factoryEndpoint);
-    factoryPostRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    const cleanFactory = JSON.stringify(cleanFactoryCopy(factoryObject));
 
-    factoryPostRequest.onload = () => {
-        if (factoryPostRequest.status === 200 || factoryPostRequest.status === 201) {
+    fetch(factoryEndpoint, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        body: cleanFactory
+    })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Failed to save factory data.");
+            }
             console.log("Factory data saved successfully.");
             fetchAndDisplayFactory();
-        } else {
-            console.error("Factory save failed:", factoryPostRequest.statusText);
-            showError(`Factory save failed: ${factoryPostRequest.statusText}`);
-        }
-    };
+        })
+        .catch(function (error) {
+            showError(error.message);
+        });
+}</code></pre>
+        </article>
+    </section>
 
-    factoryPostRequest.onerror = () => {
-        console.error("Network error while saving factory.");
-        showError("Network error while saving factory.");
-    };
 
-    const cleanFactory = JSON.stringify(cleanFactoryCopy(factoryObject));
-    factoryPostRequest.send(cleanFactory);
-}
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#carsGetRequest">carsGetRequest</a></li><li><a href="global.html#cleanCarArrayCopy">cleanCarArrayCopy</a></li><li><a href="global.html#cleanFactoryCopy">cleanFactoryCopy</a></li><li><a href="global.html#createButtonInLi">createButtonInLi</a></li><li><a href="global.html#displayCars">displayCars</a></li><li><a href="global.html#displayFactory">displayFactory</a></li><li><a href="global.html#fetchAndDisplayCars">fetchAndDisplayCars</a></li><li><a href="global.html#fetchAndDisplayFactory">fetchAndDisplayFactory</a></li><li><a href="global.html#getFactoryRequest">getFactoryRequest</a></li><li><a href="global.html#getNextSiblings">getNextSiblings</a></li><li><a href="global.html#recordInputs">recordInputs</a></li><li><a href="global.html#saveAllChangesToBlob">saveAllChangesToBlob</a></li><li><a href="global.html#saveCarsChangesToBlob">saveCarsChangesToBlob</a></li><li><a href="global.html#saveFactoryChangesToBlob">saveFactoryChangesToBlob</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#toggleAccordion">toggleAccordion</a></li><li><a href="global.html#toggleEditingMode">toggleEditingMode</a></li><li><a href="global.html#updateJsonObjectValues">updateJsonObjectValues</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed May 21 2025 21:37:00 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

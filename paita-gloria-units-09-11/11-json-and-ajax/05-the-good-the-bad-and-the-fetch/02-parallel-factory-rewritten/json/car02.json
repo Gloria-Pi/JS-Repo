@@ -1,0 +1,24 @@
+{
+    "model": "VineWhip",
+    "make": "Bulbasaur Motors",
+    "year": 2020,
+    "price": 23000,
+    "isElectric": false,
+    "features": [
+        "Apple CarPlay",
+        "Navigation System",
+        "Blind Spot Monitoring",
+        "Heated Seats"
+    ],
+    "insurance": {
+        "company": "Johto Insurance",
+        "policyNumber": "JO0987654321",
+        "expiryDate": "2026-02-01",
+        "isPaid": false
+    },
+    "previousOwners": [
+        "Emily Davis"
+    ],
+    "mileage": 30000,
+    "carId": "car02"
+}

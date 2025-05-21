@@ -1,0 +1,21 @@
+{
+    "name": "RocketFueled Car Lab",
+    "location": "Spaceport City, Alola",
+    "establishedYear": 2012,
+    "isOperating": true,
+    "totalEmployees": 1080,
+    "annualRevenue": 48000000,
+    "facilities": {
+        "assemblyLine": "The HyperLoop",
+        "paintShop": "ColorBlaster 5000",
+        "qualityControl": "The TestZone"
+    },
+    "motto": "We don’t just make cars, we make history!",
+    "carIds": [
+        "car01",
+        "car02",
+        "car03",
+        "car04",
+        "car05"
+    ]
+}
