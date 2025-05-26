@@ -38,9 +38,9 @@ noisesArray.forEach(noise => {
             capitalizedLetter +
             noise.slice(letterToCapitalize + 1);
 
-        let capitalizedNoise = capitalizedWord + "!".repeat(letterToCapitalize+1);
+        let capitalizedNoise = capitalizedWord + "!".repeat(letterToCapitalize + 1);
         transformedNoises.push(capitalizedNoise);
     }
-})
+});
 
 console.log(transformedNoises);
