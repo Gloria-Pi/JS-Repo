@@ -3,4 +3,129 @@
  * @author Gloria Paita
  * 
  * @description
+ * This script defines a list of baby objects with various properties such as name, age,
+ * sounds they make, favorite foods, and outfit. It demonstrates different array operations
+ * to add objects, iterates through the objects to display their properties, and adds
+ * an outfit to each baby using a separate array of clothing descriptions.
  */
+
+/**
+ * Represents a list of baby objects.
+ * Each baby has a name, age in months, noises, favorite foods, and later an outfit.
+ * @type {Array<Object>}
+ */
+let babies = [];
+
+/**
+ * A baby object with its basic properties.
+ * @type {Object}
+ */
+const baby1 = {
+    name: "Chiko Jr.",
+    months: 9,
+    noises: ["chi-chi!", "chikorii!"],
+    favoriteFoods: ["apricorns", "spinach mash", "sweet berries"]
+}
+
+const baby2 = {
+    name: "Cynda Cub",
+    months: 12,
+    noises: ["cynda!", "quill!"],
+    favoriteFoods: ["warm milk", "spicy mash", "pecha berry purée"]
+}
+
+const baby3 = {
+    name: "Tota Tot",
+    months: 10,
+    noises: ["to-to!", "crunch!"],
+    favoriteFoods: ["seaweed pudding", "oranges", "poke puffs"]
+}
+
+const baby4 = {
+    name: "Togechad",
+    months: 6,
+    noises: ["toge-toge!", "pii!"],
+    favoriteFoods: ["milktank formula", "soft rice porridge", "poké-puffs"]
+}
+
+// Different methods to add the babies to the "babies" array
+babies.push(baby2, baby3);
+babies.unshift(baby1);
+babies[3] = baby4;
+
+/**
+ * Iterates through the babies array and prints each baby's properties.
+ * Displays each key-value pair in the format [key: "value"].
+ */
+babies.forEach(baby => {
+
+    console.log(`${baby.name} was manufactured with these characteristics:`);
+
+    for (let key in baby) {
+        console.log(`[${key}: "${baby[key]}"]`);
+    }
+
+});
+
+/**
+ * An array of outfits, where each outfit is an object describing at least
+ * three clothing items.
+ * @type {Array<Object>}
+ */
+let outfitArray = [
+
+    {
+        hat: "bonnet",
+        onesie: "light green",
+        booties: "yellow"
+    },
+
+    {
+        hood: "orange",
+        mittens: "flame-pattern",
+        pants: "brown"
+    },
+
+    {
+        hat: "blue",
+        bib: "fang-shaped",
+        onesie: "fluffy"
+    },
+
+    {
+        hat: "plush crown",
+        cravat: "crimson",
+        socks: "white"
+    }
+];
+
+/**
+ * Adds an outfit to each baby using the outfitArray.
+ * Matches each baby with its corresponding outfit by array index.
+ */
+babies.forEach((baby, index) => {
+    baby.outfit = outfitArray[index];
+});
+
+/**
+ * Prints each baby's information again, including a nicely formatted display
+ * of their outfit (nested structure with individual clothing parts).
+ */
+babies.forEach(baby => {
+
+    console.log(`${baby.name} was manufactured with these characteristics:`);
+
+    for (let key in baby) {
+
+        if (key === "outfit") {
+            console.log(`- ${key}:`);
+            for (let part in baby.outfit) {
+                console.log(`   - ${part}: ${baby.outfit[part]}`);
+            }
+        } else {
+            console.log(`- ${key}: "${baby[key]}"`);
+        }
+    }
+    // Adds a space for formatting purposes
+    console.log("");
+});
