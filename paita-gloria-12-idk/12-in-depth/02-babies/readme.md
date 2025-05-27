@@ -22,7 +22,6 @@
 example, "shirt": "blue"
     - Print each baby again with their outfit in a nicely formatted object
 
-
 <br>
 <br>
 

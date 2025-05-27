@@ -25,28 +25,28 @@ const baby1 = {
     months: 9,
     noises: ["chi-chi!", "chikorii!"],
     favoriteFoods: ["apricorns", "spinach mash", "sweet berries"]
-}
+};
 
 const baby2 = {
     name: "Cynda Cub",
     months: 12,
     noises: ["cynda!", "quill!"],
     favoriteFoods: ["warm milk", "spicy mash", "pecha berry purée"]
-}
+};
 
 const baby3 = {
     name: "Tota Tot",
     months: 10,
     noises: ["to-to!", "crunch!"],
     favoriteFoods: ["seaweed pudding", "oranges", "poke puffs"]
-}
+};
 
 const baby4 = {
     name: "Togechad",
     months: 6,
     noises: ["toge-toge!", "pii!"],
     favoriteFoods: ["milktank formula", "soft rice porridge", "poké-puffs"]
-}
+};
 
 // Different methods to add the babies to the "babies" array
 babies.push(baby2, baby3);
@@ -65,6 +65,8 @@ babies.forEach(baby => {
         console.log(`[${key}: "${baby[key]}"]`);
     }
 
+    // Adds a space for formatting purposes
+    console.log(" ");
 });
 
 /**
@@ -107,6 +109,10 @@ babies.forEach((baby, index) => {
     baby.outfit = outfitArray[index];
 });
 
+// Separating the previous logs from the ones that will follow
+console.log("----------------------------------------------");
+console.log(" ");
+
 /**
  * Prints each baby's information again, including a nicely formatted display
  * of their outfit (nested structure with individual clothing parts).
@@ -127,5 +133,5 @@ babies.forEach(baby => {
         }
     }
     // Adds a space for formatting purposes
-    console.log("");
+    console.log(" ");
 });
