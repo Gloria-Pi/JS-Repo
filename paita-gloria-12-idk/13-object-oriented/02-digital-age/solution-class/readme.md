@@ -1,4 +1,4 @@
-# 02 Digital Age
+# 02 Digital Age - Class Version
 
 <br>
 
@@ -21,20 +21,14 @@
   - `artist` (a string)
   - `play()` prints "You played 'TITLE' by 'ARTIST'" e.g. "You played 'Another Brick in the Wall' by 'Pink Floyd'"
 
-- Use the prototype method, not classes, to write a constructors for `Video` and
+- Use the class syntax method to write a constructors for `Video` and
 `MusicVideo`
-  - The constructor functions accept a single config object
-  - All arguments are optional, use defaults if missing
 
 - Create an array that contains a mix of `Video` and `MusicVideo` instances
 
 - Loop on the Array and for each item
   - call the `watch()` method
   - call the `play()` method only if it's a MusicVideo. Hint: Use `instanceof`
-
-- Optional:
-  - in a new folder, repeat the exercise using the class syntax rather than the prototype method
-  - All behaviors should be identical
 
 <br>
 <br>
