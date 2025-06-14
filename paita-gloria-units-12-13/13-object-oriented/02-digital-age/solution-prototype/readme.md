@@ -37,7 +37,7 @@
 
 # Approach to Solution
 
-## 1. Null Coalescing in Constructor
+## 1. The `||` Operator
 
 In both constructor functions, I used:
 
@@ -45,8 +45,9 @@ In both constructor functions, I used:
 config = config || {};
 ```
 
-This ensures that if `config` is `undefined` or `null`, it defaults to an empty object `{}`. Without this fallback, attempting to access properties like `config.title` or `config.seconds` would throw a runtime error (e.g., `"Cannot read property 'title' of undefined"`).
-It also prevents needing to check whether `config` exists every time we access a property.
+This ensures that if `config` is `undefined` or `null`, it defaults to an empty object `{}`.  
+Without this fallback, attempting to access properties like `config.title` or `config.seconds` would throw a runtime error (e.g., `"Cannot read property 'title' of undefined"`).  
+It also prevents needing to check whether `config` exists every time the program tries to access a property.
 
 <br>
 
@@ -159,3 +160,29 @@ playList.forEach(playableVid => {
     console.log(" ");
 });
 ```
+
+<br>
+
+## Results
+
+```bash
+You watched all 120 seconds of "Pinocchio Trailer"
+ 
+You watched all 510 seconds of "World is Mine"
+You played "World is Mine" by "Hatsune Miku"
+ 
+You watched all 2400 seconds of "Best Bugs Bunny Moments"
+ed all 300 seconds of "What Makes You Beautiful"
+You played "What Makes You Beautiful" by "One Direction"
+ 
+You watched all 340 seconds of "River Flows in You"
+You played "River Flows in You" by "Yiruma"
+ 
+You watched all 0 seconds of "Title"
+You played "Title" by "Artist"
+```
+<br>
+
+## Prototype vs. Class Syntax
+
+To see a detailed comparison between prototype-based and class-based syntax in JavaScript, please refer to the [README](..\solution-class\readme.md), which includes a table outlining the key differences.
