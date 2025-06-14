@@ -61,13 +61,13 @@ String.prototype.toStrangeKebab = function () {
 
 // Example array of input strings
 const source = [
-    'MyNameIsMyPassportVerifyMe',
-    'My Name Is My Passport Verify Me MMM',
-    ' -- -My?Name&*is**my$$Passport???p??',
-    'mY--name--- is- - 2023---',
-    'mynameismypassport',
-    '2022 my name is',
-    '2024-my-name-is'
+    "MyNameIsMyPassportVerifyMe",
+    "My Name Is My Passport Verify Me MMM",
+    " -- -My?Name&*is**my$$Passport???p??",
+    "mY--name--- is- - 2023---",
+    "mynameismypassport",
+    "2022 my name is",
+    "2024-my-name-is"
 ];
 
 // Apply transformation and log each result

@@ -16,13 +16,13 @@ Add a method to the String prototype called `toStrangeKebab()` that transforms s
 ```js
 // Given the following array
 const source = [
-    'MyNameIsMyPassportVerifyMe',
-    'My Name Is My Passport Verify Me MMM',
-    ' -- -My?Name&*is**my$$Passport???p??',
-    'mY--name--- is- - 2023---',
-    'mynameismypassport',
-    '2022 my name is',
-    '2024-my-name-is'
+    "MyNameIsMyPassportVerifyMe",
+    "My Name Is My Passport Verify Me MMM",
+    " -- -My?Name&*is**my$$Passport???p??",
+    "mY--name--- is- - 2023---",
+    "mynameismypassport",
+    "2022 my name is",
+    "2024-my-name-is"
 ];
 
 source.forEach(item => console.log(item.toStrangeKebab()));
@@ -53,7 +53,7 @@ my-name-is
 The method `toStrangeKebab()` is added to the prototype of `String`, so it can be called directly on any string:
 
 ```js
-'MyNameIsJohn'.toStrangeKebab(); // "my-name-is-john"
+"MyNameIsJohn".toStrangeKebab(); // "my-name-is-john"
 ```
 
 <br>
@@ -142,13 +142,13 @@ Given the input:
 
 ```js
 const source = [
-    'MyNameIsMyPassportVerifyMe',
-    'My Name Is My Passport Verify Me MMM',
-    ' -- -My?Name&*is**my$$Passport???p??',
-    'mY--name--- is- - 2023---',
-    'mynameismypassport',
-    '2022 my name is',
-    '2024-my-name-is'
+    "MyNameIsMyPassportVerifyMe",
+    "My Name Is My Passport Verify Me MMM",
+    " -- -My?Name&*is**my$$Passport???p??",
+    "mY--name--- is- - 2023---",
+    "mynameismypassport",
+    "2022 my name is",
+    "2024-my-name-is"
 ];
 ```
 
