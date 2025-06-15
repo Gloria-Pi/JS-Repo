@@ -3,40 +3,56 @@
  * @author Gloria Paita
  * 
  * @description
+ * Reimplementation of the Array.prototype.slice() method using Array.prototype.reduce().
+ * Handles both positive and negative indices and supports omitted or undefined parameters,
+ * returning a shallow copy of a portion of the given array.
  */
 
-/* ASSIGNMENT
-Write functions that use the reduce method to implement your version of the following Array methods:
-`forEach()`
+/**
+ * Returns a shallow copy of a portion of an array into a new array object.
+ * This custom implementation uses reduce() to reproduce the behavior of Array.prototype.slice().
+ *
+ * @function mySlice
+ * @param {Array} targetArray - The array to slice.
+ * @param {number} [start=0] - The zero-based index at which to begin extraction. Negative values count from the end.
+ * @param {number} [end] - The zero-based index before which to end extraction. The element at this index is not included. Negative values count from the end.
+ * @returns {Array} A new array containing the extracted elements.
+ * 
+ * @example
+ * mySlice(["a", "b", "c", "d"], 1, 3); // ["b", "c"]
+ * mySlice(["a", "b", "c", "d"], -2);   // ["c", "d"]
+ * mySlice(["a", "b", "c", "d"], 2, -1); // ["c"]
+ */
+function mySlice(targetArray, start = 0, end) {
+    // Handle the start index
+    if (start < 0) {
+        start = targetArray.length + start; // Adjust for negative start
+    }
+    if (start < 0) {
+        start = 0; // Clamp to 0 if still negative
+    }
+    if (start >= targetArray.length) {
+        return []; // If start is out of bounds, return empty array
+    }
 
- implement parameters and return values as in the documentation  
-    - do not use `Array.prototype`  
-    - your functions receive as a first parameter the array on which to operate  
-    - all other parameters should be identical to the documentation  
-    - except for the `thisArg` parameter, you don't have to implement it  
+    // Handle the end index
+    if (end === undefined || end > targetArray.length) {
+        end = targetArray.length; // If no end or out of bounds, slice to the end
+    }
+    if (end < 0) {
+        end = targetArray.length + end; // Adjust for negative end
+    }
+    if (end < 0) {
+        end = 0; // Ensure end is not out of bounds (negative)
+    }
 
-
-*/
-
-//Array.prototype.forEach()
-
-/* 
-array.forEach((element, index, array) => {
-  // do something
-});
-
-
-NOTES:
-- forEach() calls a callbackfn for each element in an array
-- always returns undefined, so it's not chainable
-- the callbackfn is invoked only for array indexes that have assigned values (is not invoked for empty slots)
-*/
-
-function myForEach(anArray, callbackFn) {
-    anArray.reduce((_, current, index, originalArray) => {
-        callbackFn(current, index, originalArray);
-        return undefined; // We don't care about the accumulated value
-    }, undefined);
+    // Use reduce to build the sliced array
+    return targetArray.reduce((accumulator, currValue, currIndex) => {
+        if (currIndex >= start && currIndex < end) {
+            accumulator.push(currValue); // Push values within the range to the result array
+        }
+        return accumulator;
+    }, []);
 }
 
 //-------------------------------------
@@ -45,37 +61,22 @@ function myForEach(anArray, callbackFn) {
 const pkmnArray = ["Pikachu", "Bulbasaur", "Squirtle", "Charmander"];
 
 console.log(" ");
-console.log("======== Testing the function myForEach() ========");
+console.log("======== Testing the function mySlice() ========");
+console.log(mySlice(pkmnArray));
+console.log(mySlice(pkmnArray, 1));
+console.log(mySlice(pkmnArray, 1, 3));
+console.log(mySlice(pkmnArray, 0, 0));
+console.log(mySlice(pkmnArray, 2, 0));
+console.log(mySlice(pkmnArray, 2, -1));
+console.log(mySlice(pkmnArray, -2));
+console.log(mySlice(pkmnArray, -2));
 
-myForEach(pkmnArray, (pkmn, index, pkmnArray) => {
-    const description = `#${index + 1} - ${pkmn} (from an array of length ${pkmnArray.length})`;
-    console.log(description);
-});
+console.log("======== Testing Array.prototype.slice() ========");
 
-console.log("======== Testing Array.prototype.forEach() ========");
-
-
-pkmnArray.forEach((pkmn, index, pkmnArray) => {
-    const description = `#${index + 1} - ${pkmn} (from an array of length ${pkmnArray.length})`;
-    console.log(description);
-});
-
-//-------------------------------------
-// Testing with numbers
-
-const numberArray = [1, 2, 3, 4, 5];
-
-console.log(" ");
-console.log("======== Testing the function myForEach() ========");
-
-myForEach(numberArray, (num, index, numberArray) => {
-    const product = num * numberArray.length;
-    console.log(`The product of the number at index ${index} of the array multiplied for ${numberArray.length} ( which is the array length) is ${product}`);
-});
-
-console.log("======== Testing Array.prototype.forEach() ========");
-
-numberArray.forEach((num, index, numberArray) => {
-    const product = num * numberArray.length;
-    console.log(`The product of the number at index ${index} of the array multiplied for ${numberArray.length} ( which is the array length) is ${product}`);
-});
+console.log(pkmnArray.slice());
+console.log(pkmnArray.slice(1));
+console.log(pkmnArray.slice(1, 3));
+console.log(pkmnArray.slice(0, 0));
+console.log(pkmnArray.slice(2, 0));
+console.log(pkmnArray.slice(2, -1));
+console.log(pkmnArray.slice(-2));

@@ -3,17 +3,12 @@
  * @author Gloria Paita
  * 
  * @description
+ * This script manages a list of fictional baby Pokémon characters.
+ * It includes functions to:
+ * - Generate a string describing a baby's outfit.
+ * - Randomize and log the foods a baby is currently eating.
+ * Helper functions are included to shuffle arrays without modifying the original order.
  */
-
-
-/*ASSIGNMENT
-Using the babies array from the previous exercise:  
-- Write a getBabyOutfit() function that returns a description a baby's outfit
-    - e.g "Lyla is wearing a blue shirt and red pants and a green hat"
-- Write a feedBaby() function that prints what a baby is eating.
-    - e.g. "Lyla is eating food3, food1, food4 and food2"
-    - All foods in favoriteFoods should appear but randomly each time the function is called
-*/
 
 // ARRAY OF BABIES -------------------------------------------------------------------
 
@@ -66,12 +61,19 @@ let babies = [
 
 // HELPER FUNCTIONS -------------------------------------------------------------------
 
+/**
+ * Randomizes the position of each item from the original food array
+ * and assigns them to the corresponding positions in the target array.
+ *
+ * @param {string[]} aFoodArray - The original array of food items to randomize.
+ * @param {string[]} wannabeRandomizedFoodArray - The target array that will receive the shuffled items.
+ */
 function foodArrayRandomizer(aFoodArray, wannabeRandomizedFoodArray) {
 
-    //scramblo l'array di numeri
+    // Generate a randomized list of indexes based on the input array
     let indexesToAssign = indexListArrayScrambler(aFoodArray);
 
-    //assegno ad ogni elemento dell'array originalFoodArray un indice diverso e lo metto in randomizedFoodArray
+    // Reassign each food to a new position in the target array based on randomized indexes
     aFoodArray.forEach((food, index) => {
 
         index = indexesToAssign[index];
@@ -80,54 +82,67 @@ function foodArrayRandomizer(aFoodArray, wannabeRandomizedFoodArray) {
 
 }
 
+/**
+ * Generates an array of index numbers (0 to array.length - 1),
+ * then returns a new array containing those indexes in random order.
+ *
+ * @param {Array} anArray - The array whose length will determine the range of indexes.
+ * @returns {number[]} A new array with the same length, containing shuffled unique indexes.
+ */
 function indexListArrayScrambler(anArray) {
     const numberOfArrayItems = anArray.length;
     let arrayOfIndexes = [];
 
-    //Generates the array of indexes
+    // Fill the array with consecutive index values
     for (let i = 0; i < numberOfArrayItems; i++) {
         arrayOfIndexes.push(i);
     }
 
-    //Scrambling the array
+    // Shuffle the indexes by randomly selecting unique values
     let scrambledArrayOfIndexes = [];
     let alreadyPickedIndexes = [];
 
-    //randomizeArray(arrayOfIndexes);
-
-    // Per ogni indice
     for (let i = 0; i < numberOfArrayItems; i++) {
-
         randomizeIndex(arrayOfIndexes, alreadyPickedIndexes, scrambledArrayOfIndexes);
-
     }
-
     return scrambledArrayOfIndexes;
-
 }
 
+/**
+ * Picks a random index from the given array that hasn't already been selected,
+ * and adds it to the final list of scrambled indexes. If the index is a duplicate,
+ * the function retries until a unique one is found.
+ *
+ * @param {number[]} anArray - The source array of indexes to choose from.
+ * @param {number[]} alreadyPickedIndexesArray - Tracks which indexes have already been selected.
+ * @param {number[]} wannabeScrambledIndexesArray - Final array to which the selected index is added.
+ */
 function randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray) {
-    //Un numero fra quelli presenti
+    // Pick a random index within the range of the array
     let newIndex = Math.floor(Math.random() * anArray.length);
-    //se non è già stato selezionato -> procedi
+
+    // If the index hasn't been used, add it; otherwise retry
     if (!alreadyPickedIndexesArray.includes(newIndex)) {
         alreadyPickedIndexesArray.push(newIndex);
         wannabeScrambledIndexesArray.push(newIndex);
-        //altrimenti -> ritenta
     } else {
-        randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray)
+        randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray);
     }
 }
 
 // MAIN FUNCTIONS -------------------------------------------------------------------
 
-
+/**
+ * Logs a sentence describing what a specific baby is wearing.
+ * The description is built from the outfit object properties and adjusted
+ * based on whether the clothing item is plural or singular.
+ *
+ * @param {number} babyNumber - The index of the baby in the `babies` array.
+ * @returns {void}
+ */
 function getBabyOutfit(babyElement) {
-
     const name = babyElement.name;
-
     const outfitObject = babyElement.outfit;
-
     const outfitEntries = Object.entries(outfitObject);
 
     let fullSentence = `${name} is wearing `;
@@ -137,6 +152,7 @@ function getBabyOutfit(babyElement) {
 
         let subSentence;
 
+        // Determine if the clothing item is plural or singular
         if (key.charAt(key.length - 1) === "s") {
             subSentence = `${value} ${key} and `;
             isLastEntry();
@@ -145,6 +161,7 @@ function getBabyOutfit(babyElement) {
             isLastEntry();
         }
 
+        // Adjust final punctuation for the last item
         function isLastEntry() {
             if (entry === outfitEntries[outfitEntries.length - 1]) {
                 subSentence = `${subSentence.substring(0, subSentence.indexOf(" and"))}.`;
@@ -153,15 +170,19 @@ function getBabyOutfit(babyElement) {
                 fullSentence += subSentence;
             }
         }
-
     });
 
     console.log(fullSentence);
     console.log(" ");
-
 }
 
-
+/**
+ * Randomizes a baby's favorite foods and logs a sentence describing what they are eating.
+ * The food items are listed in a randomized order, with the last one preceded by "and".
+ *
+ * @param {number} babyNumber - The index of the baby in the `babies` array.
+ * @returns {void}
+ */
 function feedBaby(babyElement) {
 
     const name = babyElement.name;
@@ -171,7 +192,6 @@ function feedBaby(babyElement) {
     const randomizedFoodArray = [];
 
     foodArrayRandomizer(originalFoodArray, randomizedFoodArray);
-
 
     let fullSentence = `${name} is eating `;
 
@@ -187,6 +207,7 @@ function feedBaby(babyElement) {
 
 
 // APPLYING BOTH FUNCTION TO EACH BABY -------------------------------------------------------------------
+
 babies.forEach(baby => {
     getBabyOutfit(baby);
     feedBaby(baby);

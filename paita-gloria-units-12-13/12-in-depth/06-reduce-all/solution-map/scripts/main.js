@@ -3,62 +3,54 @@
  * @author Gloria Paita
  * 
  * @description
+ * Implementation of a custom map() function using reduce.
+ * Simulates Array.prototype.map without using prototype.
  */
 
-/* ASSIGNMENT
-Write functions that use the reduce method to implement your version of the following Array methods:
-`forEach()`
-
- implement parameters and return values as in the documentation  
-    - do not use `Array.prototype`  
-    - your functions receive as a first parameter the array on which to operate  
-    - all other parameters should be identical to the documentation  
-    - except for the `thisArg` parameter, you don't have to implement it  
-
-
-*/
-
-//Array.prototype.forEach()
-
-/* 
-array.forEach((element, index, array) => {
-  // do something
-});
-
-
-NOTES:
-- forEach() calls a callbackfn for each element in an array
-- always returns undefined, so it's not chainable
-- the callbackfn is invoked only for array indexes that have assigned values (is not invoked for empty slots)
-*/
-
-function myForEach(anArray, callbackFn) {
-    anArray.reduce((_, current, index, originalArray) => {
-        callbackFn(current, index, originalArray);
-        return undefined; // We don't care about the accumulated value
-    }, undefined);
+/**
+ * Transforms an array using a callback function, simulating the behavior of Array.prototype.map.
+ *
+ * @function myMap
+ * @param {Array} targetArray - The array to iterate over.
+ * @param {Function} callbackFn - A function that produces an element of the new Array, taking three arguments:
+ *  - currentValue: The current element being processed in the array
+ *  - index: The index of the current element being processed
+ *  - array: The array myMap was called upon
+ * @returns {Array} A new array with each element being the result of the callback function.
+ *
+ * @example
+ * myMap([1, 2, 3], x => x * 2); // [2, 4, 6]
+ * myMap([{id: 1}], obj => obj.id); // [1]
+ */
+function myMap(targetArray, callbackFn) {
+    return targetArray.reduce((accumulator, currElement, currIndex, targetArray) => {
+        accumulator[currIndex] = callbackFn(currElement, currIndex, targetArray); // Direct assignment
+        return accumulator; // Return the accumulator for the next iteration
+    }, []); // The accumulator is initialized as an empty array
 }
 
 //-------------------------------------
 // Testing with strings
 
-const pkmnArray = ["Pikachu", "Bulbasaur", "Squirtle", "Charmander"];
+const pokedex = [
+    { pokedex: 1, pokemon: "Pikachu" },
+    { pokedex: 2, pokemon: "Bulbasaur" },
+    { pokedex: 3, pokemon: "Squirtle" },
+    { pokedex: 4, pokemon: "Charmander" }
+];
 
 console.log(" ");
-console.log("======== Testing the function myForEach() ========");
+console.log("======== Testing the function myMap() ========");
 
-myForEach(pkmnArray, (pkmn, index, pkmnArray) => {
-    const description = `#${index + 1} - ${pkmn} (from an array of length ${pkmnArray.length})`;
-    console.log(description);
-});
-
-console.log("======== Testing Array.prototype.forEach() ========");
+const myReformattedPokedex = myMap(pokedex, ({ pokedex, pokemon }) => ({ [pokedex]: pokemon }));
+console.log(myReformattedPokedex);
 
 
-pkmnArray.forEach((pkmn, index, pkmnArray) => {
-    const description = `#${index + 1} - ${pkmn} (from an array of length ${pkmnArray.length})`;
-    console.log(description);
-});
+console.log("======== Testing Array.prototype.map() ========");
+const reformattedPokedex = pokedex.map(({ pokedex, pokemon }) => ({ [pokedex]: pokemon }));
+console.log(reformattedPokedex);
+
+
 
 //-------------------------------------
 // Testing with numbers
@@ -66,16 +58,11 @@ pkmnArray.forEach((pkmn, index, pkmnArray) => {
 const numberArray = [1, 2, 3, 4, 5];
 
 console.log(" ");
-console.log("======== Testing the function myForEach() ========");
 
-myForEach(numberArray, (num, index, numberArray) => {
-    const product = num * numberArray.length;
-    console.log(`The product of the number at index ${index} of the array multiplied for ${numberArray.length} ( which is the array length) is ${product}`);
-});
+console.log("======== Testing the function myMap() ========");
+const myMappedNumberArray = myMap(numberArray, number => number * number);
+console.log(myMappedNumberArray);
 
-console.log("======== Testing Array.prototype.forEach() ========");
-
-numberArray.forEach((num, index, numberArray) => {
-    const product = num * numberArray.length;
-    console.log(`The product of the number at index ${index} of the array multiplied for ${numberArray.length} ( which is the array length) is ${product}`);
-});
+console.log("======== Testing Array.prototype.map() ========");
+const mappedNumberArray = numberArray.map(number => number * number);
+console.log(mappedNumberArray);

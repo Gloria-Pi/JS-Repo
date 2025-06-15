@@ -3,17 +3,12 @@
  * @author Gloria Paita
  * 
  * @description
+ * This script manages a list of fictional baby Pokémon characters.
+ * It includes functions to:
+ * - Generate a string describing a baby's outfit.
+ * - Randomize and log the foods a baby is currently eating.
+ * Helper functions are included to shuffle arrays without modifying the original order.
  */
-
-
-/*ASSIGNMENT
-Using the babies array from the previous exercise:  
-- Write a getBabyOutfit() function that returns a description a baby's outfit
-    - e.g "Lyla is wearing a blue shirt and red pants and a green hat"
-- Write a feedBaby() function that prints what a baby is eating.
-    - e.g. "Lyla is eating food3, food1, food4 and food2"
-    - All foods in favoriteFoods should appear but randomly each time the function is called
-*/
 
 // ARRAY OF BABIES -------------------------------------------------------------------
 
@@ -66,20 +61,31 @@ let babies = [
 
 // HELPER FUNCTIONS -------------------------------------------------------------------
 
+/**
+ * Randomly assigns each item in a food array to a new index in a target array.
+ *
+ * @param {string[]} aFoodArray - The original array of food items.
+ * @param {string[]} wannabeRandomizedFoodArray - The target array to hold the randomized order.
+ */
 function foodArrayRandomizer(aFoodArray, wannabeRandomizedFoodArray) {
 
-    //scramblo l'array di numeri
+    // Scrambling the array of numbers
     let indexesToAssign = indexListArrayScrambler(aFoodArray);
 
-    //assegno ad ogni elemento dell'array originalFoodArray un indice diverso e lo metto in randomizedFoodArray
+    // Assigning to each element of originalFoodArray an index, then placing it in randomizedFoodArray
     aFoodArray.forEach((food, index) => {
 
         index = indexesToAssign[index];
         wannabeRandomizedFoodArray[index] = food;
     });
-
 }
 
+/**
+ * Creates and returns a new array of index numbers, shuffled randomly.
+ *
+ * @param {Array} anArray - The array whose length determines the number of indexes to generate.
+ * @returns {number[]} An array of unique, scrambled index values.
+ */
 function indexListArrayScrambler(anArray) {
     const numberOfArrayItems = anArray.length;
     let arrayOfIndexes = [];
@@ -93,39 +99,49 @@ function indexListArrayScrambler(anArray) {
     let scrambledArrayOfIndexes = [];
     let alreadyPickedIndexes = [];
 
-    // Per ogni indice
     for (let i = 0; i < numberOfArrayItems; i++) {
-
         randomizeIndex(arrayOfIndexes, alreadyPickedIndexes, scrambledArrayOfIndexes);
-
     }
-
     return scrambledArrayOfIndexes;
-
 }
 
+/**
+ * Randomly selects a new index that hasn't been used yet and adds it to the scrambled array.
+ * If the index has already been picked, retries until a unique one is found.
+ *
+ * @param {number[]} anArray - Original array of indexes.
+ * @param {number[]} alreadyPickedIndexesArray - Tracks which indexes have already been picked.
+ * @param {number[]} wannabeScrambledIndexesArray - Final array where picked indexes are added.
+ */
 function randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray) {
-    //Un numero fra quelli presenti
+    // A number among the one that are available
     let newIndex = Math.floor(Math.random() * anArray.length);
-    //se non è già stato selezionato -> procedi
+    // If it hasn't been selected yet -> proceed
     if (!alreadyPickedIndexesArray.includes(newIndex)) {
         alreadyPickedIndexesArray.push(newIndex);
         wannabeScrambledIndexesArray.push(newIndex);
-        //altrimenti -> ritenta
+        // Else: try again
     } else {
-        randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray)
+        randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray);
     }
 }
 
 // MAIN FUNCTIONS -------------------------------------------------------------------
 
-
+/**
+ * Logs a sentence describing what a specific baby is wearing, using their outfit object.
+ *
+ * @param {number} babyNumber - The index of the baby in the `babies` array.
+ * @returns {void}
+ *
+ * @example
+ * getBabyOutfit(0);
+ * // Chiko Jr. is wearing a bonnet hat and a light green onesie and yellow booties.
+ */
 function getBabyOutfit(babyNumber) {
 
     const name = babies[babyNumber].name;
-
     const outfitObject = babies[babyNumber].outfit;
-
     const outfitEntries = Object.entries(outfitObject);
 
     let fullSentence = `${name} is wearing `;
@@ -151,15 +167,22 @@ function getBabyOutfit(babyNumber) {
                 fullSentence += subSentence;
             }
         }
-
     });
 
     console.log(fullSentence);
     console.log(" ");
-
 }
 
-
+/**
+ * Randomizes the order of a baby's favorite foods and logs a sentence describing what the baby is eating.
+ *
+ * @param {number} babyNumber - The index of the baby in the `babies` array.
+ * @returns {void}
+ *
+ * @example
+ * feedBaby(2);
+ * // Tota Tot is eating poke puffs, seaweed pudding, and oranges.
+ */
 function feedBaby(babyNumber) {
 
     const name = babies[babyNumber].name;
@@ -169,7 +192,6 @@ function feedBaby(babyNumber) {
     const randomizedFoodArray = [];
 
     foodArrayRandomizer(originalFoodArray, randomizedFoodArray);
-
 
     let fullSentence = `${name} is eating `;
 
@@ -182,6 +204,8 @@ function feedBaby(babyNumber) {
     console.log(fullSentence);
     console.log(" ");
 }
+
+// TESTING THE FUNCTIONS -------------------------------------------------------------------
 
 console.log("---- What are the babies wearing?".toUpperCase());
 console.log(" ");

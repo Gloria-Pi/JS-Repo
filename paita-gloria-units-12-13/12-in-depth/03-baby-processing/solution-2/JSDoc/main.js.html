@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file main.js
+ * @author Gloria Paita
+ * 
+ * @description
+ * This script manages a list of fictional baby Pokémon characters.
+ * It includes functions to:
+ * - Generate a string describing a baby's outfit.
+ * - Randomize and log the foods a baby is currently eating.
+ * Helper functions are included to shuffle arrays without modifying the original order.
+ */
+
+// ARRAY OF BABIES -------------------------------------------------------------------
+
+let babies = [
+    {
+        name: "Chiko Jr.",
+        months: 9,
+        noises: ["chi-chi!", "chikorii!"],
+        favoriteFoods: ["apricorns", "spinach mash", "sweet berries"],
+        outfit: {
+            hat: "bonnet",
+            onesie: "light green",
+            booties: "yellow"
+        }
+    },
+    {
+        name: "Cynda Cub",
+        months: 12,
+        noises: ["cynda!", "quill!"],
+        favoriteFoods: ["warm milk", "spicy mash", "pecha berry purée"],
+        outfit: {
+            hood: "orange",
+            mittens: "flame-pattern",
+            pants: "brown"
+        }
+    },
+    {
+        name: "Tota Tot",
+        months: 10,
+        noises: ["to-to!", "crunch!"],
+        favoriteFoods: ["seaweed pudding", "oranges", "poke puffs"],
+        outfit: {
+            hat: "blue",
+            bib: "fang-shaped",
+            onesie: "fluffy"
+        }
+    },
+    {
+        name: "Togechad",
+        months: 6,
+        noises: ["toge-toge!", "pii!"],
+        favoriteFoods: ["milktank formula", "soft rice porridge", "poké-puffs"],
+        outfit: {
+            hat: "plush crown",
+            cravat: "crimson",
+            socks: "white"
+        }
+    }
+];
+
+// HELPER FUNCTIONS -------------------------------------------------------------------
+
+/**
+ * Randomizes the position of each item from the original food array
+ * and assigns them to the corresponding positions in the target array.
+ *
+ * @param {string[]} aFoodArray - The original array of food items to randomize.
+ * @param {string[]} wannabeRandomizedFoodArray - The target array that will receive the shuffled items.
+ */
+function foodArrayRandomizer(aFoodArray, wannabeRandomizedFoodArray) {
+
+    // Generate a randomized list of indexes based on the input array
+    let indexesToAssign = indexListArrayScrambler(aFoodArray);
+
+    // Reassign each food to a new position in the target array based on randomized indexes
+    aFoodArray.forEach((food, index) => {
+
+        index = indexesToAssign[index];
+        wannabeRandomizedFoodArray[index] = food;
+    });
+
+}
+
+/**
+ * Generates an array of index numbers (0 to array.length - 1),
+ * then returns a new array containing those indexes in random order.
+ *
+ * @param {Array} anArray - The array whose length will determine the range of indexes.
+ * @returns {number[]} A new array with the same length, containing shuffled unique indexes.
+ */
+function indexListArrayScrambler(anArray) {
+    const numberOfArrayItems = anArray.length;
+    let arrayOfIndexes = [];
+
+    // Fill the array with consecutive index values
+    for (let i = 0; i &lt; numberOfArrayItems; i++) {
+        arrayOfIndexes.push(i);
+    }
+
+    // Shuffle the indexes by randomly selecting unique values
+    let scrambledArrayOfIndexes = [];
+    let alreadyPickedIndexes = [];
+
+    for (let i = 0; i &lt; numberOfArrayItems; i++) {
+        randomizeIndex(arrayOfIndexes, alreadyPickedIndexes, scrambledArrayOfIndexes);
+    }
+    return scrambledArrayOfIndexes;
+}
+
+/**
+ * Picks a random index from the given array that hasn't already been selected,
+ * and adds it to the final list of scrambled indexes. If the index is a duplicate,
+ * the function retries until a unique one is found.
+ *
+ * @param {number[]} anArray - The source array of indexes to choose from.
+ * @param {number[]} alreadyPickedIndexesArray - Tracks which indexes have already been selected.
+ * @param {number[]} wannabeScrambledIndexesArray - Final array to which the selected index is added.
+ */
+function randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray) {
+    // Pick a random index within the range of the array
+    let newIndex = Math.floor(Math.random() * anArray.length);
+
+    // If the index hasn't been used, add it; otherwise retry
+    if (!alreadyPickedIndexesArray.includes(newIndex)) {
+        alreadyPickedIndexesArray.push(newIndex);
+        wannabeScrambledIndexesArray.push(newIndex);
+    } else {
+        randomizeIndex(anArray, alreadyPickedIndexesArray, wannabeScrambledIndexesArray);
+    }
+}
+
+// MAIN FUNCTIONS -------------------------------------------------------------------
+
+/**
+ * Logs a sentence describing what a specific baby is wearing.
+ * The description is built from the outfit object properties and adjusted
+ * based on whether the clothing item is plural or singular.
+ *
+ * @param {number} babyNumber - The index of the baby in the `babies` array.
+ * @returns {void}
+ */
+function getBabyOutfit(babyElement) {
+    const name = babyElement.name;
+    const outfitObject = babyElement.outfit;
+    const outfitEntries = Object.entries(outfitObject);
+
+    let fullSentence = `${name} is wearing `;
+
+    outfitEntries.forEach(entry => {
+        const [key, value] = entry;
+
+        let subSentence;
+
+        // Determine if the clothing item is plural or singular
+        if (key.charAt(key.length - 1) === "s") {
+            subSentence = `${value} ${key} and `;
+            isLastEntry();
+        } else {
+            subSentence = `a ${value} ${key} and `;
+            isLastEntry();
+        }
+
+        // Adjust final punctuation for the last item
+        function isLastEntry() {
+            if (entry === outfitEntries[outfitEntries.length - 1]) {
+                subSentence = `${subSentence.substring(0, subSentence.indexOf(" and"))}.`;
+                fullSentence += subSentence;
+            } else {
+                fullSentence += subSentence;
+            }
+        }
+    });
+
+    console.log(fullSentence);
+    console.log(" ");
+}
+
+/**
+ * Randomizes a baby's favorite foods and logs a sentence describing what they are eating.
+ * The food items are listed in a randomized order, with the last one preceded by "and".
+ *
+ * @param {number} babyNumber - The index of the baby in the `babies` array.
+ * @returns {void}
+ */
+function feedBaby(babyElement) {
+
+    const name = babyElement.name;
+
+    const originalFoodArray = babyElement.favoriteFoods;
+
+    const randomizedFoodArray = [];
+
+    foodArrayRandomizer(originalFoodArray, randomizedFoodArray);
+
+    let fullSentence = `${name} is eating `;
+
+    const lastFood = randomizedFoodArray[randomizedFoodArray.length - 1];
+
+    for (let food of randomizedFoodArray) {
+        fullSentence += lastFood === food ? `and ${food}.` : `${food}, `;
+    }
+
+    console.log(fullSentence);
+    console.log(" ");
+}
+
+
+// APPLYING BOTH FUNCTION TO EACH BABY -------------------------------------------------------------------
+
+babies.forEach(baby => {
+    getBabyOutfit(baby);
+    feedBaby(baby);
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#feedBaby">feedBaby</a></li><li><a href="global.html#foodArrayRandomizer">foodArrayRandomizer</a></li><li><a href="global.html#getBabyOutfit">getBabyOutfit</a></li><li><a href="global.html#indexListArrayScrambler">indexListArrayScrambler</a></li><li><a href="global.html#randomizeIndex">randomizeIndex</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Jun 15 2025 22:58:51 GMT+0200 (Ora legale dell’Europa centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -3,82 +3,96 @@
  * @author Gloria Paita
  * 
  * @description
+ * This file contains a custom implementation of the `indexOf()` method using `Array.prototype.reduce`.
+ * The function mimics the native behavior of `Array.prototype.indexOf()` including:
+ * - Handling of the `fromIndex` parameter (positive and negative)
+ * - Returning -1 if the element is not found
+ * - Skipping empty slots
+ * - Not matching `NaN` due to strict equality
  */
 
-/* ASSIGNMENT
-Write functions that use the reduce method to implement your version of the following Array methods:
-`forEach()`
+/**
+ * Custom implementation of Array.prototype.indexOf using reduce.
+ *
+ * @function myIndexOf
+ * @description
+ * Searches for the first occurrence of a given element in an array, starting from an optional index.
+ * Returns the index if found, or -1 if not found. This version uses `reduce` and mimics native behavior.
+ *
+ * @param {Array} targetArray - The array to search in.
+ * @param {*} searchElement - The element to locate in the array.
+ * @param {number} [fromIndex=0] - The index to start searching from. Can be negative to count from the end.
+ * @returns {number} The index of the first matching element, or -1 if not found.
+ *
+ * @example
+ * myIndexOf(["a", "b", "c"], "b");           // returns 1
+ * myIndexOf(["a", "b", "c"], "d");           // returns -1
+ * myIndexOf(["a", "b", "a"], "a", 1);        // returns 2
+ * myIndexOf(["a", "b", "c"], "a", -2);       // returns -1
+ */
+function myIndexOf(targetArray, searchElement, fromIndex = 0) {
+    // Adjusts negative fromIndex to a valid non-negative starting point
+    if (fromIndex < 0) {
+        fromIndex = Math.max(targetArray.length + fromIndex, 0);  // Handles too negative values
+    }
 
- implement parameters and return values as in the documentation  
-    - do not use `Array.prototype`  
-    - your functions receive as a first parameter the array on which to operate  
-    - all other parameters should be identical to the documentation  
-    - except for the `thisArg` parameter, you don't have to implement it  
+    return targetArray.reduce((accumulator, curElement, currIndex) => {
+        // Skip elements before the starting index
+        if (currIndex < fromIndex) {
+            return accumulator;
+        }
 
+        // If match is found and we haven't already found one, return its index
+        if (curElement === searchElement && accumulator === -1) {
+            return currIndex;
+        }
 
-*/
-
-//Array.prototype.forEach()
-
-/* 
-
-The indexOf() method of Array instances returns the first index at which a given element can be found in the array, or -1 if it is not present.
-
-array.forEach((element, index, array) => {
-  // do something
-});
-
-
-NOTES:
-- forEach() calls a callbackfn for each element in an array
-- always returns undefined, so it's not chainable
-- the callbackfn is invoked only for array indexes that have assigned values (is not invoked for empty slots)
-*/
-
-function myForEach(anArray, callbackFn) {
-    anArray.reduce((_, current, index, originalArray) => {
-        callbackFn(current, index, originalArray);
-        return undefined; // We don't care about the accumulated value
-    }, undefined);
+        // If we've gone through the array and haven't found the match, return -1
+        return accumulator;
+    }, -1);  // Starting with "Not found"
 }
 
 //-------------------------------------
 // Testing with strings
 
-const pkmnArray = ["Pikachu", "Bulbasaur", "Squirtle", "Charmander"];
+const caughtPokemon = [
+    "Pikachu", "Bulbasaur", "Squirtle", "Charmander",
+    "Pikachu", "Chikorita", "Totodile"
+];
 
-console.log(" ");
-console.log("======== Testing the function myForEach() ========");
+console.log("======== Testing the function myIndexOf() ========");
+console.log(myIndexOf(caughtPokemon, "Pikachu"));        // → 0
+console.log(myIndexOf(caughtPokemon, "Pikachu", 1));     // → 4 (second "Pikachu")
+console.log(myIndexOf(caughtPokemon, "Mew"));            // → -1 (not found)
+console.log(myIndexOf(caughtPokemon, "Pikachu", 8));     // → -1 (fromIndex too large)
+console.log(myIndexOf(caughtPokemon, "Pikachu", -4));    // → 4 (starts from index 3)
+console.log(myIndexOf([], "Pikachu"));                   // → -1 (empty array)
 
-myForEach(pkmnArray, (pkmn, index, pkmnArray) => {
-    const description = `#${index + 1} - ${pkmn} (from an array of length ${pkmnArray.length})`;
-    console.log(description);
-});
+console.log("======== Testing Array.prototype.indexOf() ========");
 
-console.log("======== Testing Array.prototype.forEach() ========");
-
-
-pkmnArray.forEach((pkmn, index, pkmnArray) => {
-    const description = `#${index + 1} - ${pkmn} (from an array of length ${pkmnArray.length})`;
-    console.log(description);
-});
+console.log(caughtPokemon.indexOf("Pikachu"));
+console.log(caughtPokemon.indexOf("Pikachu", 1));
+console.log(caughtPokemon.indexOf("Mew"));
+console.log(caughtPokemon.indexOf("Pikachu", 8));
+console.log(caughtPokemon.indexOf("Pikachu", -4));
+console.log([].indexOf("Pikachu", -1));
 
 //-------------------------------------
-// Testing with numbers
+// Testing with falsy values
 
-const numberArray = [1, 2, 3, 4, 5];
+let falsyArray = [false, 0, "", NaN];
 
 console.log(" ");
-console.log("======== Testing the function myForEach() ========");
 
-myForEach(numberArray, (num, index, numberArray) => {
-    const product = num * numberArray.length;
-    console.log(`The product of the number at index ${index} of the array multiplied for ${numberArray.length} ( which is the array length) is ${product}`);
-});
+console.log("======== Testing the function myIndexOf() ========");
+console.log(myIndexOf(falsyArray, false));  // → 0
+console.log(myIndexOf(falsyArray, 0));      // → 1
+console.log(myIndexOf(falsyArray, ""));     // → 2
+console.log(myIndexOf(falsyArray, NaN));    // → -1 (NaN !== NaN)
 
-console.log("======== Testing Array.prototype.forEach() ========");
+console.log("======== Testing Array.prototype.indexOf() ========");
 
-numberArray.forEach((num, index, numberArray) => {
-    const product = num * numberArray.length;
-    console.log(`The product of the number at index ${index} of the array multiplied for ${numberArray.length} ( which is the array length) is ${product}`);
-});
+console.log(falsyArray.indexOf(false));
+console.log(falsyArray.indexOf(0));
+console.log(falsyArray.indexOf(""));
+console.log(falsyArray.indexOf(NaN));       // Always -1 because NaN !== NaN
