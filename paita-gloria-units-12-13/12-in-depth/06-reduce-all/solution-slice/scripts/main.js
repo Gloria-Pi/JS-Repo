@@ -69,7 +69,6 @@ console.log(mySlice(pkmnArray, 0, 0));
 console.log(mySlice(pkmnArray, 2, 0));
 console.log(mySlice(pkmnArray, 2, -1));
 console.log(mySlice(pkmnArray, -2));
-console.log(mySlice(pkmnArray, -2));
 
 console.log("======== Testing Array.prototype.slice() ========");
 
