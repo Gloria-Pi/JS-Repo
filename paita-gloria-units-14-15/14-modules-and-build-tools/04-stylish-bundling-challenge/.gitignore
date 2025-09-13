@@ -1,0 +1,16 @@
+# node modules (never upload these)
+node_modules/
+
+# output folder (Webpack will rebuild this anyway)
+dist/
+
+# system files
+.DS_Store
+
+# optional: VS Code settings
+.vscode/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
