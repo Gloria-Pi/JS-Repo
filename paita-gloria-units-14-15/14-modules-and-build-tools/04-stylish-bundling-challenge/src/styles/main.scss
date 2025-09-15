@@ -1,10 +1,47 @@
-$h1-color: pink;
+@import "bootstrap/scss/bootstrap";
 
-h1 {
-    color: $h1-color;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+@font-face {
+    font-family: 'CI GameDev';
+    src: url('../assets/fonts/ci-gamedev.ttf') format('truetype');
 }
 
-// body {
-//     background: no-repeat url("../../assets/logo.svg");
-// }
+header,
+#game-grid {
+    font-family: 'CI GameDev', sans-serif;
+}
+
+h2 {
+    font-weight: bold;
+}
+
+header {
+    background-image: url("../assets/img/pikachu.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 3.5rem;
+}
+
+.card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.03);
+    }
+}
+
+#game-grid {
+
+    padding-top: 1.5rem;
+
+    .card {
+        cursor: pointer;
+    }
+
+    .card-img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        object-position: center;
+    }
+}
