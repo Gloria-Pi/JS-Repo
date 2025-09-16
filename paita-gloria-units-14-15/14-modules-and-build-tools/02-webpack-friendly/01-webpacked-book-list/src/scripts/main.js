@@ -6,14 +6,23 @@
  * This script dynamically generates a list of books on a webpage. Each book entry includes
  * the title, author, and cover image, and is styled based on whether the book has been read.
  * After 5 seconds, an external CSS file is applied to modify the appearance of read/unread books.
- */
+*/
+
+import { loadDelayedCSS } from "./helper.js";
+
+import notredame from "../assets/img/notredame.jpg";
+import design from "../assets/img/design.jpg";
+import haikyuu1 from "../assets/img/haikyuu1.jpg";
+import holocaust from "../assets/img/holocaust.jpg";
+
 
 /**
  * @constant {Array<Object>} bookList
  * @description
  * An array of book objects to be rendered on the webpage. Each object contains the book's
  * title, author, read status, and an image URL (added later via JavaScript).
- */
+*/
+
 const bookList = [
     {
         title: "The Hunchback of Notre-Dame",
@@ -37,101 +46,33 @@ const bookList = [
     }
 ];
 
-/**
- * @constant {HTMLElement} pageTitle
- * @description
- * The H1 element that contains the main title of the page ("My Book List").
- */
-const pageTitle = document.querySelector("h1");
-
-/**
- * @constant {HTMLElement} newUl
- * @description
- * The unordered list (ul) element created to hold all book entries.
- */
-const newUl = document.createElement("ul");
-
-// Insert the UL element directly after the H1
-pageTitle.insertAdjacentElement("afterend", newUl);
-
-/**
- * @constant {HTMLElement} ulElement
- * @description
- * The reference to the UL element that will contain all LI elements for books.
- */
-const ulElement = document.querySelector("ul");
-
-// Generate list items for each book and assign class depending on read status
-bookList.forEach(book => {
-    let newListItem = document.createElement("li");
-    newListItem.textContent = book.title.concat(" - ", book.author);
-    ulElement.appendChild(newListItem);
-
-    //Add class "read/unread" to the LI depending on the value of alreadyRead
-    if (book.alreadyRead) {
-        newListItem.classList.add("read");
-
-    } else {
-        newListItem.classList.add("unread");
-    }
-});
-
-/**
- * @constant {Array<string>} imgArray
- * @description
- * An array of image file paths to be added as the `url` property of each book.
- */
 const imgArray = [
-    "./assets/img/notredame.jpg",
-    "./assets/img/design.jpg",
-    "./assets/img/holocaust.jpg",
-    "./assets/img/haikyuu1.jpg"
+    notredame,
+    design,
+    holocaust,
+    haikyuu1
 ];
 
 // Dynamically add the `url` property to each book
-bookList.forEach((book, index) => {
-    book.url = imgArray[index];
+bookList.forEach((book, i) => {
+    book.url = imgArray[i];
 });
 
-/**
- * @constant {HTMLCollectionOf<HTMLLIElement>} allListItems
- * @description
- * All "li" elements created for each book, used for image and style manipulation.
- */
-const allListItems = document.getElementsByTagName("li");
+const pageTitle = document.querySelector("h1");
+const newUl = document.createElement("ul");
+pageTitle.insertAdjacentElement("afterend", newUl);
 
-// Initialize index
-let imgIndex = 0;
+bookList.forEach(({ title, author, alreadyRead, url }) => {
+    const li = document.createElement("li");
+    li.textContent = `${title} - ${author}`;
+    li.classList.add(alreadyRead ? "read" : "unread");
 
-// Append an image to each list item and style it based on the read status
-for (let listItem of allListItems) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.style.border = `2px solid ${alreadyRead ? "green" : "red"}`;
+    li.appendChild(img);
 
-    const book = bookList[imgIndex]; // Get the corresponding book
-    let newImg = document.createElement("img");
+    newUl.appendChild(li);
+});
 
-    // Picking the IMG link from the array
-    newImg.src = book.url;
-
-    // Using JavaScript to change the style of the book depending on whether you have read it or not
-    if (book.alreadyRead) {
-        newImg.style.border = "solid 2px green";
-
-    } else {
-        newImg.style.border = "solid 2px red";
-    }
-
-    // Puts each IMG inside the LI element
-    listItem.appendChild(newImg);
-
-    // To the next img link
-    imgIndex++;
-}
-
-// Add external CSS after a delay of 5 seconds
-const cssFile = document.createElement("link");
-cssFile.rel = "stylesheet";
-cssFile.href = "./styles/style.css";
-
-setTimeout(() => {
-    document.head.appendChild(cssFile);
-}, 5000);
+loadDelayedCSS();

@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 //const autoprefixer = require('autoprefixer')
 
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Used with postcss-loader -> automatically adds vendor prefixes -> helps w compatibility
 // const autoprefixer = require('autoprefixer')
@@ -42,6 +43,7 @@ module.exports = {
             //Check if I'm in DEVELOPMENT or PRODUCTION
             {
                 test: /\.css$/i,
+                exclude: /delayed\.css$/, // This CSS needs to be injected at a later date
                 use: [
                     isProduction
                         ? MiniCssExtractPlugin.loader
@@ -64,13 +66,31 @@ module.exports = {
                 ],
             },
 
+            // Delayed CSS (emitted as separate file, not auto-injected)
+            {
+                test: /delayed\.css$/i,
+                type: "asset/resource", // emit as a file (generated an URL)
+                generator: {
+                    filename: "assets/[name].[contenthash][ext]",
+                },
+            },
 
-            //Images
+            //IMAGES
+            //Favicons will always be emitted
+            {
+                test: /favicon\.(ico|png|svg)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/favicon/[name][ext]'
+                }
+            },
+
             {
                 test: /\.(avif|svg|ico|png|webp|jpg|gif|jpeg)$/i,
+                exclude: /favicon\.(ico|png|svg)$/i, // exclude favicon from inlining
                 type: 'asset',
                 generator: {
-                    filename: 'assets/[name][ext]'
+                    filename: 'assets/img/[name][ext]'
                 },
                 parser: {
                     dataUrlCondition: {
