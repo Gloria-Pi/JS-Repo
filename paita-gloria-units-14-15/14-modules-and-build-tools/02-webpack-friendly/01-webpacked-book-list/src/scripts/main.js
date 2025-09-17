@@ -3,10 +3,11 @@
  * @author Gloria Paita
  * 
  * @description
- * This script dynamically generates a list of books on a webpage. Each book entry includes
- * the title, author, and cover image, and is styled based on whether the book has been read.
- * After 5 seconds, an external CSS file is applied to modify the appearance of read/unread books.
-*/
+ * Dynamically generates a list of books on the page. Each book entry includes
+ * the title, author, and a cover image, and is styled conditionally based on
+ * whether the book has been read. After a delay, an external CSS file is loaded
+ * to further style the elements.
+ */
 
 import { loadDelayedCSS } from "./helper.js";
 
@@ -19,10 +20,9 @@ import holocaust from "../assets/img/holocaust.jpg";
 /**
  * @constant {Array<Object>} bookList
  * @description
- * An array of book objects to be rendered on the webpage. Each object contains the book's
- * title, author, read status, and an image URL (added later via JavaScript).
-*/
-
+ * List of book objects to display. Each book has a title, author,
+ * read status, and will later be assigned an image URL.
+ */
 const bookList = [
     {
         title: "The Hunchback of Notre-Dame",
@@ -46,6 +46,11 @@ const bookList = [
     }
 ];
 
+/**
+ * @constant {Array<string>} imgArray
+ * @description
+ * Array of imported image paths corresponding to each book.
+ */
 const imgArray = [
     notredame,
     design,
@@ -53,7 +58,7 @@ const imgArray = [
     haikyuu1
 ];
 
-// Dynamically add the `url` property to each book
+// Add image URLs to book objects
 bookList.forEach((book, i) => {
     book.url = imgArray[i];
 });
@@ -62,6 +67,7 @@ const pageTitle = document.querySelector("h1");
 const newUl = document.createElement("ul");
 pageTitle.insertAdjacentElement("afterend", newUl);
 
+// Render each book as an <li> with an image and conditional styling
 bookList.forEach(({ title, author, alreadyRead, url }) => {
     const li = document.createElement("li");
     li.textContent = `${title} - ${author}`;
@@ -75,4 +81,5 @@ bookList.forEach(({ title, author, alreadyRead, url }) => {
     newUl.appendChild(li);
 });
 
+// Load non-critical CSS after a delay
 loadDelayedCSS();

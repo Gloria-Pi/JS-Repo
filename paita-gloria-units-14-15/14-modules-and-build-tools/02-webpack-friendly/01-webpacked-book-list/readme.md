@@ -19,6 +19,7 @@
   - [Development vs Production Mode](#development-vs-production-mode)
 - [Notes & Challenges](#notes--challenges)
 - [Syntax & Structural Changes](#syntax--structural-changes)
+- [Polyfills & Compatibility](#polyfills--compatibility)
 - [Browser Compatibility](#browser-compatibility)
 
 <br>
@@ -35,6 +36,8 @@
    - Using javascript change the style of the book depending on whether you have read it or not
 - Add an external css file that applies after 5 seconds
    - Now change the style of the book depending on whether you have read it or not using both css and javascript (the CSS should use a different color for read books)
+
+<br>
 
 # Current Assignment
 Aims of the exercise:
@@ -96,7 +99,6 @@ Aims of the exercise:
 
     └── 📁 styles/            # CSS files
         └── delayed.css       # CSS injected after delay
-
 ```
 
 <br>
@@ -153,11 +155,11 @@ Aims of the exercise:
 ```
 
 ### 🔍 Notes
-- main.[contenthash].js: Output of the main.js entry point.
-- style.[contenthash].css: Contains CSS from non-delayed styles, extracted by MiniCssExtractPlugin.
-- delayed.css: Handled separately using asset/resource; it’s emitted as a standalone file under assets/ with hashed name for cache busting.
+- `main.[contenthash].js`: Output of the `main.js` entry point.
+- `style.[contenthash].css`: Contains CSS from non-delayed styles, extracted by `MiniCssExtractPlugin`.
+- `delayed.css`: Handled separately using `asset/resource`; it’s emitted as a standalone file under `assets/` with hashed name for cache busting.
 - Images smaller than 50KB may be inlined as base64 and not appear as separate files.
-- favicon.ico is always emitted to assets/favicon/, regardless of size.
+- `favicon.ico` is always emitted to `assets/favicon/`, regardless of size.
 - All filenames use [contenthash] to ensure proper cache invalidation.
 
 <br>
@@ -172,6 +174,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 This variable is used to conditionally configure loaders and plugins, optimizing the build differently depending on the environment.
 
+---
 ### Development Mode
 
 When `NODE_ENV !== 'production'`:
@@ -194,6 +197,7 @@ When `NODE_ENV !== 'production'`:
   * Uses gzip compression
 * **Build is not minified**, allowing for easier debugging and faster builds.
 
+---
 ### Production Mode
 
 When `NODE_ENV === 'production'`:
@@ -219,7 +223,7 @@ When `NODE_ENV === 'production'`:
   clean: true
   ```
 
-
+---
 ### Scripts
 
 * **Development:**
@@ -235,6 +239,7 @@ When `NODE_ENV === 'production'`:
   ```
 
 <br>
+<br>
 
 # Approach to Solution - Webpack Ver.
 For a better understanding of the original exercise and its related code, please refer to this [Readme](../../../../paita-gloria-units-09-11/09-the-dom/02-book-list/readme.md).
@@ -249,7 +254,7 @@ While the original assignment seemed short and easy, incorporating **images** an
 
 The goal was to **inject a CSS file into the HTML document after a 5-second delay**, instead of having it load with the initial page render — mimicking a late-loading feature (e.g., dark mode, animations, etc.).
 
----
+<br>
 
 ### Initial Refactor Attempt
 
@@ -276,7 +281,7 @@ import { injectDelayedCSS } from './helper.js';
 injectDelayedCSS();
 ```
 
----
+<br>
 
 ## Unexpected Behavior
 
@@ -313,7 +318,7 @@ setTimeout(() => {
 }, 5000);
 ```
 
----
+<br>
 
 ## 🔍 Root Cause
 
@@ -332,7 +337,7 @@ This happened because of the default CSS rule:
 
 Webpack treats all imported CSS as something to bundle and inject **immediately** into the DOM or extract into a file.
 
----
+<br>
 
 ## Solution
 
@@ -373,7 +378,7 @@ To delay the CSS injection:
 }
 ```
 
----
+<br>
 
 ## Final Working Setup
 
@@ -382,18 +387,21 @@ To delay the CSS injection:
 * In `helper.js`, I manually create a `<link>` tag and append it after a 5-second delay:
 
 ```js
-export function injectDelayedCSS() {
-  const cssFile = document.createElement('link');
-  cssFile.rel = 'stylesheet';
-  cssFile.href = './assets/delayed.[contenthash].css'; // Replace with actual filename if needed
-  setTimeout(() => {
-    document.head.appendChild(cssFile);
-  }, 5000);
+export function loadDelayedCSS(delay = 5000) {
+    setTimeout(() => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = delayedCSS; // webpack gives final URL
+        document.head.appendChild(link);
+
+        console.log(`CSS loaded after ${delay / 1000} seconds`);
+    }, delay);
 }
 ```
 
 
-
+<br>
+<br>
 
 ## Problem 2: Favicon Not Showing Up
 
@@ -403,9 +411,9 @@ While setting up the project, I noticed that the **favicon was not appearing** i
 <link rel="icon" href="./assets/favicon.ico" />
 ```
 
----
+<br>
 
-### Root Cause
+## Root Cause
 
 By default, Webpack doesn't automatically emit static assets like favicons unless they're:
 
@@ -414,7 +422,7 @@ By default, Webpack doesn't automatically emit static assets like favicons unles
 
 Also, favicons can easily be **inlined or ignored** if treated like regular image assets.
 
----
+<br>
 
 ## Solution: Add `html-loader` + Favicon Rule
 
@@ -443,7 +451,7 @@ To make Webpack recognize and resolve assets inside HTML files (`<img>`, `<link>
 
 This ensures Webpack **detects the favicon reference in HTML** and processes it as a dependency.
 
----
+<br>
 
 ### 2. Created a Specific Favicon Rule
 
@@ -465,7 +473,7 @@ This ensures:
 * It keeps its original name and extension
 * It avoids being inlined
 
----
+<br>
 
 ### 3. Excluded Favicons from the General Image Rule
 
@@ -487,7 +495,7 @@ The general image rule originally applied to all image formats, including `.ico`
 }
 ```
 
----
+<br>
 
 ## Result
 
@@ -496,20 +504,8 @@ After making these changes:
 * The favicon was correctly emitted and linked in the final `index.html`
 * It showed up reliably in the browser across development and production builds
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<br>
 
 # Syntax & Structural Changes
 I refactored the project by:
@@ -556,7 +552,7 @@ import { loadDelayedCSS } from "./helper.js";
 loadDelayedCSS();
 ```
 
----
+<br>
 
 ## 2. Image Imports with Webpack
 
@@ -584,7 +580,8 @@ import haikyuu1 from "../assets/img/haikyuu1.jpg";
 const imgArray = [notredame, design, holocaust, haikyuu1];
 ```
 
----
+<br>
+
 
 ## 3. Use of Destructuring in Loops
 
@@ -606,7 +603,8 @@ bookList.forEach(({ title, author, alreadyRead, url }) => {
 });
 ```
 
----
+<br>
+
 
 ## 4. Template Literals Instead of `.concat()`
 
@@ -622,7 +620,8 @@ li.textContent = book.title.concat(" - ", book.author);
 li.textContent = `${title} - ${author}`;
 ```
 
----
+<br>
+
 
 ## 5. Ternary Operators for Class and Style Logic
 
@@ -645,7 +644,8 @@ li.classList.add(alreadyRead ? "read" : "unread");
 img.style.border = `2px solid ${alreadyRead ? "green" : "red"}`;
 ```
 
----
+<br>
+
 
 ## 6. Elimination of Redundant DOM Queries
 
@@ -668,7 +668,8 @@ pageTitle.insertAdjacentElement("afterend", newUl);
 newUl.appendChild(li); // reuses the already created reference
 ```
 
----
+<br>
+
 
 ## 7. Webpack-Compatible CSS Loading
 
@@ -685,17 +686,62 @@ import delayedCSS from "../styles/delayed.css";
 link.href = delayedCSS; // Webpack provides the hashed URL
 ```
 
+<br>
+<br>
+
+## Polyfills & Compatibility
+
+To support older browsers (including IE 11), this project uses Babel with:
+
+```js
+useBuiltIns: 'usage',
+corejs: '3.21.1'
+```
+
+This setup ensures that only the polyfills actually needed by the code are included in the final bundle — no more, no less.
+
+Target browsers are defined as:
+
+```js
+targets: {
+  edge: '127',
+  firefox: '128',
+  chrome: '127',
+  safari: '17.5',
+  ie: '11'
+}
+```
+
+### What was polyfilled?
+
+After building, the following polyfills from `core-js` were added:
+
+* `es.array.concat` — used in string/array concatenation
+* `es.object.to-string` — added by default to improve object type checks
+
+These were injected automatically by Babel based on the usage in the codebase.
+
+### What wasn’t included?
+
+* **`regenerator-runtime`** was *not* included — because the project doesn’t use `async/await` or generator functions. Babel skipped it as expected.
+
+### How this was verified
+
+* Enabled `debug: true` in Babel to see what polyfills were added
+* Inspected the final bundle (`dist/main.[hash].js`) for `core-js` imports
+* Confirmed no unnecessary polyfills were bundled
+
+<br>
+<br>
 
 
+## Browser Compatibility
+The built version of this project was manually tested on the following modern browsers:
 
+- Google Chrome
+- Opera
+- Microsoft Edge
+- Mozilla Firefox
 
-## 📦 Polyfills
-
-- What polyfills are included
-- Why they were added (which features required them)
-- How they were added (e.g., via Babel or direct import)
-
-## 🌐 Browser Compatibility
-- List of browsers tested
-- Known issues (if any)
-- How to test (e.g., "open dist/index.html in browser")
+All features (including delayed CSS injection, image rendering, and styling) worked as expected across these browsers.  
+**No compatibility issues were observed.**

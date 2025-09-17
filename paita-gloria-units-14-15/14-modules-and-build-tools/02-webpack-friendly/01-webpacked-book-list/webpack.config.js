@@ -112,8 +112,8 @@ module.exports = {
                                 targets: { edge: '127', firefox: '128', chrome: '127', safari: '17.5', ie: '11' },
                                 //targets '> 0.25%, not dead',
                                 useBuiltIns: 'usage',
-                                corejs: '3.21.1' //specifies the version of core-js to use for polyfilling when useBuiltIns: 'usage' (?)
-
+                                corejs: '3.21.1', //specifies the version of core-js to use for polyfilling when useBuiltIns: 'usage' (?)
+                                //debug: true,
                             }
                         ]]
                     }
