@@ -12,24 +12,80 @@
 # Assignment
 
 Use the following resources:  
-● [style-loader](https://webpack.js.org/loaders/style-loader/), [sass-loader](https://webpack.js.org/loaders/sass-loader/), [Asset Modules Guide](https://webpack.js.org/guides/asset-modules/)
+- [style-loader](https://webpack.js.org/loaders/style-loader/), [sass-loader](https://webpack.js.org/loaders/sass-loader/), [Asset Modules Guide](https://webpack.js.org/guides/asset-modules/)
 
 Create a small project with HTML, SCSS, JavaScript files, and images  
-● Use Webpack to:  
-1. Build SCSS files into a single CSS bundle  
-2. Handle various image types with automatic decision between inlining  
-and emitting based on file size (e.g., 50KB)  
+- Use Webpack to:  
+  1. Build SCSS files into a single CSS bundle  
+  2. Handle various image types with automatic decision between inlining  
+  and emitting based on file size (e.g., 50KB)  
 
-● Include a README.md file with a brief explanation of your Webpack  
+- Include a README.md file with a brief explanation of your Webpack  
 configuration and how it handles SCSS and images
-
 
 <br>
 <br>
 
 # Approach to Solution
 
-## 🚀 Webpack Settings
+# Webpack Configuration Notes
+## Tech Stack
+| Technology                  | Version | Purpose                                             |
+| --------------------------- | ------- | --------------------------------------------------- |
+| **webpack**                 | 5.101.3 | Bundling                                            |
+| **webpack-cli**             | 6.0.1   | CLI for webpack                                     |
+| **webpack-dev-server**      | 5.2.2   | Development server                                  |
+| **@babel/core**             | 7.28.4  | JavaScript transpilation / polyfills                |
+| **@babel/preset-env**       | 7.28.3  | Modern JavaScript syntax support                    |
+| **babel-loader**            | 10.0.0  | Babel integration with webpack                      |
+| **css-loader**              | 7.1.2   | CSS import and resolution                           |
+| **style-loader**            | 4.0.0   | Inject CSS into the DOM                             |
+| **sass-loader**             | 16.0.5  | Loads and compiles SCSS/SASS files                  |
+| **sass**                    | ^1.92.1 | SASS compiler used to process `.scss`/`.sass` files |
+| **mini-css-extract-plugin**| 2.9.4   | Extract CSS to separate files                       |
+| **postcss**                 | 8.5.6   | CSS post-processing                                 |
+| **postcss-loader**          | 8.2.0   | Integrate PostCSS with webpack                      |
+| **postcss-preset-env**      | 10.3.1  | Modern CSS features / polyfills                     |
+| **html-webpack-plugin**     | 5.6.4   | Inject HTML templates into output                   |
+| **html-loader**             | 5.1.0   | Import HTML and resolve linked assets               |
+| **autoprefixer**            | 10.4.21| Adds vendor prefixes to CSS automatically           |
+| **core-js**                 | 3.45.1  | JavaScript polyfills for compatibility              |
+| **@bootstrap**              | 5.3.8   | Frontend UI framework for responsive design         |
+| **@popperjs/core**          | 2.11.8  | Tooltip & popover positioning engine (used by Bootstrap) |
+| **Node.js**                 | ≥16.x   | Runtime for scripts and tooling                     |
+
+
+<br>
+
+## Folder Structure
+```bash
+📁 Root/
+├── .gitignore               # Git ignore rules
+├── package.json             # Project metadata, dependencies, and scripts
+├── package-lock.json        # Exact versions of installed dependencies
+├── readme.md                # Project documentation and assignment details
+├── webpack.config.js        # Webpack configuration
+└── 📁 src/                   # Source files
+    ├── temp.html            # HTML template
+    ├── 📁 assets/           # Static assets
+    │   ├── 📁 fonts/
+    │   │   └── ci-gaemdev.ttf
+    │   └── 📁 img/
+    │       ├── pikachu.jpg
+    │       ├── pokemon-emerald.avif
+    │       ├── (...)
+    │       └── pokemon-snap.avif
+    ├── 📁 scripts/           
+    │   ├── helper.js         # Helper functions
+    │   └── main.js           # Main script
+    └── 📁 styles/            # CSS & SCSS files
+        └── main.scss       
+```
+
+<br>
+
+
+## Webpack General Settings
 - Webpack 5 bundling
 - Babel for ES6+ compatibility (including IE11)
 - SCSS and CSS support
@@ -40,14 +96,34 @@ configuration and how it handles SCSS and images
 - Source maps for easier debugging
 - Content-hashed filenames for cache busting
 
-<br>
 
-**Note**:
-- A common webpack.config.js file is used for both production and development mode
+**Note**: A common webpack.config.js file is used for both production and development mode
 
 <br>
 
-### 🖼️ Image Handling
+## Running the Project
+
+### Install dependencies:
+
+```bash
+npm install
+```
+
+### Start dev server:
+
+```bash
+npm run start
+```
+
+### Build for production:
+
+```bash
+npm run build
+```
+
+<br>
+
+## Image Handling
 
 This Webpack config uses `type: 'asset'` to handle images intelligently:
 
@@ -56,21 +132,10 @@ This Webpack config uses `type: 'asset'` to handle images intelligently:
 
 This behavior is controlled by `parser.dataUrlCondition.maxSize = 70 * 1024` in the Webpack module rules.
 
+<br>
+<br>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Pokémon Games Showcase — Webpack Project
+# The Project: Pokémon Games Showcase
 
 ## Overview
 
@@ -84,11 +149,11 @@ The main goals of this project were to:
 * Manage static assets like fonts
 * Get comfortable working with loaders, plugins, and Webpack dev server
 
----
+<br>
 
 ## Project Features
 
-### SCSS → CSS Build
+## SCSS → CSS Build
 
 SCSS files are compiled using `sass-loader`, processed by `postcss-loader` (with `autoprefixer`), and extracted into a separate CSS file using `MiniCssExtractPlugin`.
 
@@ -113,7 +178,7 @@ SCSS files are compiled using `sass-loader`, processed by `postcss-loader` (with
 
 The final CSS bundle is hashed and output as `style.[contenthash].css`.
 
----
+<br>
 
 ### Image Handling (Asset Modules)
 
@@ -140,7 +205,7 @@ Image assets are handled using Webpack 5's **Asset Modules** feature with the `t
 * I verified that two images under 70KB were **not copied into the `dist/` folder**, meaning they were correctly inlined as Base64.
 * For now, I’m keeping the original image formats (e.g., `.png`, `.jpg`) to help validate how Webpack handles them before optimizing to `.webp` or `.avif`.
 
----
+<br>
 
 ### JavaScript
 
@@ -172,7 +237,7 @@ JavaScript is compiled with Babel using `@babel/preset-env` to support a wide ra
 }
 ```
 
----
+<br>
 
 ### Fonts
 
@@ -188,7 +253,7 @@ Font files are handled using `asset/resource` and emitted to `dist/assets/fonts/
 }
 ```
 
----
+<br>
 
 ### HTML & Templating
 
@@ -196,11 +261,12 @@ HTML is processed using `html-loader`, which ensures that image paths inside HTM
 
 The final `index.html` is generated using `HtmlWebpackPlugin`, using `src/temp.html` as a template.
 
----
+<br>
+<br>
 
-## Known Issues & Warnings
+# Known Issues & Warnings
 
-### Sass / Bootstrap Deprecations
+## Sass / Bootstrap Deprecations
 
 While building the project, I got several warnings related to **deprecated Sass features** used internally by Bootstrap:
 
@@ -210,10 +276,11 @@ Examples:
 * Global built-in functions like `unit()` are deprecated — use `math.unit()`
 * Sass `@import` is deprecated and will be removed in Dart Sass 3.0.0
 
-➡️ **Temporary workaround**: Downgrade Dart Sass
-➡️ **Better fix**: Wait for Bootstrap’s next major version (probably v6) which should address these issues
+A **temporary workaround** would have been to downgrade Dart Sass, but that wouldn't have been sustainable in the long run.
 
----
+  The **better fix**: to wait for Bootstrap’s next major version (probably v6) which should address these issues.
+
+<br>
 
 ## Performance Considerations
 
@@ -227,7 +294,7 @@ Webpack also gave this warning:
 > You can limit the size of your bundles by using `import()` or `require.ensure()` to lazy-load some parts of your application.
 > Ref: [https://webpack.js.org/guides/code-splitting/](https://webpack.js.org/guides/code-splitting/)
 
----
+<br>
 
 ## Dev Server & Live Reloading
 
@@ -248,7 +315,7 @@ devServer: {
 
 This allows hot reload and live updates when changing HTML or JS/SCSS.
 
----
+<br>
 
 ## Future Improvements
 
@@ -257,25 +324,3 @@ This allows hot reload and live updates when changing HTML or JS/SCSS.
 * [ ] Implement lazy loading with `import()` to split the bundle
 * [ ] Improve accessibility — fix modal-related `aria-hidden` focus warnings
 * [ ] Clean up bundle sizes and add performance budgets
-
----
-
-## Running the Project
-
-### Install dependencies:
-
-```bash
-npm install
-```
-
-### Start dev server:
-
-```bash
-npm run start
-```
-
-### Build for production:
-
-```bash
-npm run build
-```
