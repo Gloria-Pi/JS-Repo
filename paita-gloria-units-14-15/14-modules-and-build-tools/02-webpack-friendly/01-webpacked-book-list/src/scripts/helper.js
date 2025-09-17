@@ -12,13 +12,3 @@ export function loadDelayedCSS(delay = 5000) {
         console.log(`CSS loaded after ${delay / 1000} seconds`);
     }, delay);
 }
-
-// setTimeout(() => {
-//   import("../styles/style.css")
-//     .then(() => {
-//       console.log('CSS loaded after 5 seconds');
-//     })
-//     .catch(err => {
-//       console.error('Failed to load CSS:', err);
-//     });
-// }, 5000);
