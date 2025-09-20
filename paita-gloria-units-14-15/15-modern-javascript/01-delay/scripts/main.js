@@ -19,17 +19,6 @@
  * @example
  * delay(1000).then(() => console.log("1 second later"));
  */
-
-/**
- * Returns a Promise that resolves after the specified number of milliseconds.
- *
- * @function
- * @param {number} delayedMs - The number of milliseconds to wait before resolving.
- * @returns {Promise<string>} A Promise that resolves with the string "Solved!" after the delay.
- *
- * @example
- * delay(1000).then(() => console.log("1 second later"));
- */
 const delay = (delayedMs) => {
     return new Promise((resolve) => {
     setTimeout( () => {

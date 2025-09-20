@@ -123,6 +123,6 @@ The main takeaway from this experience is the following:
 
 <br>
 
-## 📘 Final Thoughts
+## Final Thoughts
 
 This assignment taught me more than just how to implement a delay. It reminded me to think carefully about **function references** vs **function calls**, especially when working with asynchronous patterns like Promises.
