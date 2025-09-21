@@ -1,5 +1,5 @@
 {
-  "name": "webpackstudy",
+  "name": "04-stylish-bundling-challenge",
   "version": "1.0.0",
   "scripts": {
     "build": "webpack --mode production",
