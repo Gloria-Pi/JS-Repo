@@ -1,7 +1,17 @@
+/**
+ * @file helper.js
+ * @author Gloria Paita
+ * @description Helper functions and data for Pokémon game category modal display.
+ */
+
 import { Modal } from 'bootstrap';
 
 // DOM Manipulation: Modal ===========================================
-// helper.js
+
+/**
+ * An object containing Pokémon game categories and their respective games.
+ * @type {Object.<string, string[]>}
+ */
 export const categories = {
     'Main Series': ['Pokémon Red', 'Pokémon Gold', 'Pokémon Ruby', 'Pokémon Diamond', 'Pokémon Sword'],
     'Pocket': ['Pokémon TCG Online', 'Pokémon TCG Live'],
@@ -11,6 +21,10 @@ export const categories = {
     'Other Games': ['Pokémon Snap', 'Pokkén Tournament', 'Detective Pikachu']
 };
 
+/**
+ * Displays a Bootstrap modal with a list of games for the given category.
+ * @param {string} category - The name of the category to display.
+ */
 export function showCategoryModal(category) {
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');

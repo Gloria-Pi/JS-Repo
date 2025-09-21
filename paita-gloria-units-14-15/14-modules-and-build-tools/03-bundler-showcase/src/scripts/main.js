@@ -1,3 +1,12 @@
+/**
+ * @file main.js
+ * @author Gloria Paita
+ * @description
+ * Entry point script that dynamically injects Pokémon game cards into the DOM,
+ * handles modal opening for each category, and fixes a known Chrome accessibility
+ * issue related to Bootstrap modals.
+ */
+
 // JS
 import { showCategoryModal } from './helper.js';
 
@@ -5,7 +14,6 @@ import { showCategoryModal } from './helper.js';
 import '../styles/main.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
-
 
 // DOM Manipulation: Injecting the images into the code ===========================================
 import pkmnEmerald from '../assets/img/pokemon-emerald.avif';
@@ -15,6 +23,10 @@ import pkmnRanger from '../assets/img/pokemon-ranger.webp';
 import pkmnSnap from '../assets/img/pokemon-snap.avif';
 import pkmnGo from '../assets/img/pokemon-go.webp';
 
+/**
+ * Array of Pokémon game categories with titles, images, and descriptions.
+ * @type {Array<{title: string, img: string, desc: string}>}
+ */
 const games = [
   {
     title: 'Main Series',
@@ -48,7 +60,10 @@ const games = [
   }
 ];
 
-//Ensures the HTML is loaded before running JS
+/**
+ * Initializes the game cards on DOMContentLoaded by injecting HTML elements
+ * and attaching click event listeners to open the category modal.
+ */
 document.addEventListener('DOMContentLoaded', () => {
   games.forEach(game => {
     const col = document.createElement('div');
@@ -66,15 +81,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('game-grid').appendChild(col);
 
-    //Modal
+    // Attach event listener to open modal on card click
     col.querySelector('.open-modal').addEventListener('click', () => {
       showCategoryModal(game.title);
     });
   });
 });
 
-// Fix to the fix "Blocked aria-hidden on an element because its descendant retained focus..." error on Chrome (due to the modals)
-// It ensures that focus is removed from the active element whenever a modal is closed.
+/**
+ * Fixes Chrome accessibility bug with Bootstrap modals where
+ * an element with `aria-hidden` is blocked because its descendant retains focus.
+ * On modal hide, this removes focus from the active element.
+ */
 document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener('hide.bs.modal', function (event) {
     if (document.activeElement) {

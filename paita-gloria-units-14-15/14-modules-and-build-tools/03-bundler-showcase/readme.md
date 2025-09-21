@@ -25,6 +25,31 @@ your files and any notable features or issues
 
 # Approach to Solution
 
+## Table of Contents
+
+- [Author](#author)
+- [Assignment](#assignment)
+- [Approach to Solution](#approach-to-solution)
+- [Bundler Showcase: Vite](#bundler-showcase-vite)
+  - [Why Vite?](#why-vite)
+  - [Project Setup](#project-setup)
+    - [`package.json`](#packagejson)
+    - [Entry Point](#entry-point)
+  - [Features](#features)
+    - [Hot Module Replacement (HMR)](#hot-module-replacement-hmr)
+    - [Dependency Handling](#dependency-handling)
+    - [Sass Support](#sass-support)
+    - [Modern CSS Features](#modern-css-features)
+  - [Browser Compatibility](#browser-compatibility)
+  - [Comparison with Webpack](#comparison-with-webpack)
+    - [Vite (`package.json` excerpt)](#vite-packagejson-excerpt)
+    - [Webpack (`package.json` excerpt)](#webpack-packagejson-excerpt)
+  - [Build Output](#build-output)
+    - [Contents of `dist`](#contents-of-dist)
+    - [Notes](#notes)
+  - [Conclusion](#conclusion)
+  - [Setup Instructions](#setup-instructions)
+
 # Bundler Showcase: Vite
 
 ## Why Vite?
@@ -167,7 +192,7 @@ export default defineConfig({
 
 ## Comparison with Webpack
 
-Here's a rough comparison between the final Vite and Webpack `package.json` files for the same project:
+Here's a rough comparison between the final Vite and Webpack `package.json` files for the same project (please refer to this [readme](/04-stylish-bundling-challenge/readme.md) for more information about the webpack project):
 
 ### Vite (`package.json` excerpt)
 
@@ -289,3 +314,53 @@ Vite provided a lean and fast setup with:
 * Optional legacy support via a plugin
 
 Compared to Webpack, Vite requires far fewer dependencies and almost no boilerplate, making it ideal for small-to-medium projects or quick prototypes.
+
+
+<br>
+<br>
+
+## Setup Instructions
+
+If you download or clone this project **without** `node_modules` and the `dist` folder, follow these steps to get started:
+
+1. **Install dependencies**
+
+   Run this command in the project root to install all required packages based on `package.json`:
+
+   ```bash
+   npm install
+    ```
+
+2. **Start the development server**
+
+   This launches Vite's local dev server with hot module replacement for rapid development:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open the URL printed in the terminal (usually `http://localhost:5173`) to see the project running in your browser.
+
+3. **Build for production**
+
+   When ready to create an optimized, deployable build, run:
+
+   ```bash
+   npm run build
+   ```
+
+   This generates a `dist` folder with all minified assets and an `index.html` ready for deployment.
+
+4. **Preview the production build locally**
+
+   To serve the `dist` folder locally and verify the production build, run:
+
+   ```bash
+   npm run preview
+   ```
+
+   This will start a local server (usually at `http://localhost:4173`) serving the built app.
+
+---
+
+> **Note:** You need to have [Node.js](https://nodejs.org/) installed on your machine for these commands to work.
