@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Modern Enhanced Arrivals</title>
+
+    <meta name="description" content="My attempt at solving exercise 03 Greatest Hits - 02 Modern Enhanced Arrivals">
+    <meta name="author" content="Gloria Paita">
+
+    <!-- Fallback (generic) favicon -->
+    <link rel="icon" href="assets/img/logo.svg">
+
+</head>
+
+<body>
+
+    <h1>Welcome to a Random Airport Website</h1>
+    <div class="h2">
+        <p class="tab highlighted">ARRIVALS</p>
+        <p class="tab">DEPARTURES</p>
+    </div>
+
+    <p id="update-msg">Flight Schedules updated at
+        <span id="update-time"></span>
+    </p>
+
+    <div class="arrivals-table fade in">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Hour</th>
+                    <th>Origin</th>
+                    <th>Flight</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Airplane</th>
+                </tr>
+            </thead>
+            <tbody id="arrivals-table-body" class="accordion">
+                <!-- Rows will be added here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <div class="departures-table fade">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Hour</th>
+                    <th>Origin</th>
+                    <th>Flight</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Airplane</th>
+                    <th>Checkin</th>
+                </tr>
+            </thead>
+            <tbody id="departures-table-body" class="accordion">
+                <!-- Rows will be added here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 - Gloria Paita</p>
+    </footer>
+    
+    <!-- end of the body -->
+    <!-- the script will be injected via webpack -->
+</body>
+
+</html>

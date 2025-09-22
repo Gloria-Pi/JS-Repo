@@ -1,0 +1,187 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer,
+h1 {
+    background-color: #5484b8;
+    color: whitesmoke;
+    align-content: center;
+    text-align: center;
+    padding: 10px;
+}
+
+h1 {
+    margin: 0;
+    min-height: 100px;
+}
+
+footer {
+    margin-top: auto;
+}
+
+div.h2 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 3px;
+    display: flex;
+    margin-left: 15px;
+    color: rgba(245, 245, 245, 0.871);
+}
+
+div.h2 p {
+    background-color: #6471bb69;
+    padding: 20px 60px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-weight: 300;
+    border: 1px solid;
+    transition: background-color 0.4s ease;
+}
+
+div.h2 {
+    margin-bottom: 10px;
+}
+
+div {
+    margin-bottom: 80px;
+}
+
+div.h2 p.highlighted {
+    color: whitesmoke;
+    background-color: #6471bb;
+}
+
+div.h2 p:hover {
+    background-color: #6471bb;
+}
+
+.arrivals-table,
+.departures-table {
+    padding: 0 15px;
+}
+
+
+.fade.in {
+    opacity: 1;
+    display: block;
+    visibility: visible;
+}
+
+.fade {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+    display: none;
+    visibility: hidden;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 0.7px;
+}
+
+
+th,
+td {
+    border: 1px solid #ccc;
+    text-align: left;
+    border-right: none;
+    border-left: none;
+}
+
+th {
+    padding: 13px;
+    font-weight: lighter;
+    font-size: 20px;
+    color: #6471bb;
+    background-color: whitesmoke;
+}
+
+td {
+    padding: 10px;
+}
+
+#update-msg,
+#update-time {
+    color: rgb(92, 90, 90);
+    font-style: italic;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 0.2px;
+    padding-bottom: 10px;
+    font-size: 18px;
+}
+
+#update-msg {
+    margin-left: 23px;
+}
+
+#flight-table-body {
+    color: rgb(63, 63, 63);
+}
+
+
+/* This class will be dynamically applied using JavaScript */
+.delayed {
+    background-color: #6471bb;
+    color: white;
+}
+
+
+/*ACCORDION----------------------------------*/
+
+
+.accordion {
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+}
+
+.accordion-title {
+    cursor: pointer;
+    transition: background-color ease 0.4s;
+    background-color: #faf9fc;
+}
+
+.accordion-title.delayed {
+    background-color: #6471bb;
+}
+
+.accordion-content {
+    overflow: hidden;
+    background-color: #e8e7ed;
+}
+
+.accordion-title.delayed+.accordion-content {
+    background-color: #c9ceec;
+}
+
+.accordion-content p {
+    margin: 0;
+    padding: 8px;
+    text-align: center;
+    font-style: italic;
+    color: rgb(110, 108, 108);
+}
+
+.accordion-title:hover,
+.accordion-title.active {
+    background-color: #c9ceec;
+}
+
+.accordion-title.delayed:hover,
+.accordion-title.delayed.active {
+    background-color: #6471bbb6;
+}
+
+div.flight-details {
+    margin: 0;
+}
