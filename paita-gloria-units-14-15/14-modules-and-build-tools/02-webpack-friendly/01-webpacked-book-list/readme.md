@@ -21,6 +21,7 @@
 - [Syntax & Structural Changes](#syntax--structural-changes)
 - [Polyfills & Compatibility](#polyfills--compatibility)
 - [Browser Compatibility](#browser-compatibility)
+- [How To Install and Run the Project](#how-to-install-and-run)
 
 <br>
 
@@ -745,3 +746,44 @@ The built version of this project was manually tested on the following modern br
 
 All features (including delayed CSS injection, image rendering, and styling) worked as expected across these browsers.  
 **No compatibility issues were observed.**
+
+<br>
+<br>
+
+## How to Install and Run
+
+### 1. Install dependencies
+
+Make sure you have [Node.js](https://nodejs.org/) installed, then run:
+
+```bash
+npm install
+```
+
+This will install all required dependencies for the project.
+
+### 2. Run development server
+
+Start the local development server with hot reloading:
+
+```bash
+npm run dev
+```
+
+This will serve the project at `http://localhost:5001/` by default.
+
+### 3. Build for production
+
+Create an optimized production build in the `/dist` folder:
+
+```bash
+npm run build
+```
+
+### 4. Watch for changes
+
+To automatically rebuild on source file changes:
+
+```bash
+npm run watch
+```

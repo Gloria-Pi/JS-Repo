@@ -1,4 +1,4 @@
-# 01 Webpack friendly
+# 02 Webpack friendly
 
 # Author
 **Author**: Gloria Paita  
@@ -34,3 +34,25 @@ I picked this project because, even though the core JavaScript is simple, it inc
 - Basic **DOM manipulation** (creating elements, setting styles, etc.)
 
 These features helped me practice how to properly configure Webpack loaders, manage assets, and apply polyfills to support older browsers — all while keeping the project small and manageable.
+
+<br>
+
+## 02 - [Enhanced Arrivals](../../../paita-gloria-units-09-11/10-events-and-listeners/05-enhanced-arrivals/readme.md)
+### Why I Chose This Project
+
+I chose this project because it presented an exciting opportunity to enhance and modernize a complex application dealing with dynamic flight data. This project challenged me to:
+
+- Refactor legacy code by merging similar functions, improving maintainability and reducing redundancy  
+- Implement modern JavaScript features like optional chaining (`?.`), nullish coalescing (`??`), and concise arrow functions  
+- Handle dynamic UI updates involving DOM manipulation, such as adding flight rows with expandable details (accordions)  
+- Configure Webpack to bundle and polyfill for modern browser compatibility while maintaining efficient asset management  
+- Learn more about the import/export of webpack modules
+
+Overall, this project allowed me to deepen my understanding of both frontend architecture and build tooling, making the code more robust, readable, and scalable.
+
+> **Note:** The complete project is not contained within this folder.  
+> To explore the full project, please navigate to the `[02-modern-enhanced-arrivals]` folder located at `15-modern-javascript/03-greatest-hits`.  
+>  
+> For details on how the project was refactored, see the [refactoring readme](../../15-modern-javascript/03-greatest-hits/02-modern-enhanced-arrivals/readme.md).  
+>  
+> For an in-depth explanation of the Webpack configurations used, refer to the [Webpack notes](../../15-modern-javascript/03-greatest-hits/02-modern-enhanced-arrivals/webpack-notes.md).

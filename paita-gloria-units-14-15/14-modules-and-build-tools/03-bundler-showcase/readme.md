@@ -50,6 +50,8 @@ your files and any notable features or issues
   - [Conclusion](#conclusion)
   - [Setup Instructions](#setup-instructions)
 
+<br>
+
 # Bundler Showcase: Vite
 
 ## Why Vite?
@@ -100,6 +102,8 @@ In the HTML file, the JavaScript is imported as a module:
 For TypeScript, simply rename `main.js` to `main.ts` and update the HTML reference accordingly.
 
 > ⚠️ Vite does not do type checking — only transpilation. Use your editor (e.g., VS Code) or tools like `tsc` for type checking.
+
+<br>
 
 ## Features
 

@@ -31,13 +31,17 @@
     - The user should be able to switch between Arrivals and Departures with a fade-in/fade-out
 animation
 
+<br>
+
 ## Link to the original implementation
 To learn more about the original version of this project, please refer to this [README](../../../../paita-gloria-units-09-11/10-events-and-listeners/05-enhanced-arrivals/readme.md).
 
-## Webpack Notes
+<br>
 
+## Webpack Notes
 In this document, I explained how I refactored my flight management code to improve maintainability, readability, and modern JavaScript usage. If you want to learn more about the specific Webpack configurations and module bundling strategies I used in this project, please refer to the separate documentation file: [`webpack-notes.md`](./webpack-notes.md).
 
+<br>
 <br>
 
 # Approach to Solution
@@ -137,6 +141,7 @@ const arrivingFlight = arrivals?.[arrFlightsIndex];
 * Cleaner spacing and consistent formatting improve maintainability.
 * The function inside `setInterval` is written as an arrow function, which is the modern default for inline callbacks.
 
+<br>
 <br>
 
 # `flightsGenerator.js`
@@ -418,7 +423,7 @@ element.classList.toggle(className, condition);
 * If `condition` is `true`, it **adds** the class.
 * If `condition` is `false`, it **removes** the class.
 
----
+<br>
 
 ### Example 1 of how it's used in `setupTabs`
 
@@ -452,6 +457,7 @@ Result:
 * Shows the table that matches the clicked tab.
 * Hides the others — again, **cleaner** than using `if/else` or manual `add`/`remove`.
 
+<br>
 
 ### Summary
 
@@ -610,6 +616,8 @@ newRow.innerHTML = columns
 Used the `??` operator to safely fall back to an empty string (`""`) when a flight property is undefined or null. This prevents broken table cells or runtime issues when optional flight fields are missing.
 
 <br>
+<br>
+
 
 ## Refactoring: Improving `toggleAccordion`
 
@@ -863,6 +871,7 @@ if (detailsDiv && !detailsDiv.querySelector(".additional-msg")) {
 ```
 
 <br>
+<br>
 
 ## Refactor: `isArrived()` and `isDeparted()` → `updateFlightStatusByTime()`
 
@@ -908,7 +917,7 @@ export function updateFlightStatusByTime(flights, targetStatus) {
 }
 ```
 
----
+<br>
 
 ## Usage
 
@@ -917,7 +926,7 @@ updateFlightStatusByTime(arrivals, "ARRIVED");
 updateFlightStatusByTime(departures, "DEPARTED");
 ```
 
----
+<br>
 
 ## 🔍 Why This Refactor Was Necessary
 
@@ -929,7 +938,8 @@ updateFlightStatusByTime(departures, "DEPARTED");
 | Risk of DOM errors if row was missing              | Added optional chaining and early return guards     |
 | Multiple `new Date()` calls                        | Replaced with a single `Date.now()` for performance |
 
----
+<br>
+
 
 ## Modern JavaScript Features Used
 
@@ -942,6 +952,8 @@ updateFlightStatusByTime(departures, "DEPARTED");
 | Function parameterization | Allows flexible use for both arrivals and departures          |
 
 <br>
+<br>
+
 
 # Refactoring Flight Removal Functions
 

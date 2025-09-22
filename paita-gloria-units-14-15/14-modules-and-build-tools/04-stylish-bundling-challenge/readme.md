@@ -319,8 +319,8 @@ This allows hot reload and live updates when changing HTML or JS/SCSS.
 
 ## Future Improvements
 
-* [ ] Enable tree-shaking and only import the Bootstrap components I use
-* [ ] Optimize images with `image-webpack-loader` or convert to WebP/AVIF
-* [ ] Implement lazy loading with `import()` to split the bundle
-* [ ] Improve accessibility — fix modal-related `aria-hidden` focus warnings
-* [ ] Clean up bundle sizes and add performance budgets
+* Enable tree-shaking and only import the Bootstrap components I use
+* Optimize images with `image-webpack-loader` or convert to WebP/AVIF
+* Implement lazy loading with `import()` to split the bundle
+* Improve accessibility — fix modal-related `aria-hidden` focus warnings
+* Clean up bundle sizes and add performance budgets

@@ -164,8 +164,6 @@ const printCardInfo = (cardNumber, isValid, errorType) => {
 | Message Formatting    | Fixed spacing (inconsistent) | Uses `padEnd()` for aligned columns     |
 | Type Handling         | Relies on implicit coercion  | Explicitly converts `isValid` to string |
 
-Here’s a clear, no-emoji README that explains the refactor of your `validateCreditCard` function, focusing on making the logic more modular and declarative. It highlights key differences with concise explanations and code snippets.
-
 <br>
 <br>
 

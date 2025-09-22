@@ -155,7 +155,7 @@ Make sure you have [Node.js](https://nodejs.org/) installed, then run:
 
 ```bash
 npm install
-````
+```
 
 This will install all required dependencies for the project.
 
