@@ -1,0 +1,59 @@
+
+/* GENERAL STYLE */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+h1 {
+    text-align: center;
+    color: rosybrown;
+}
+
+/* JOKE SECTION STYLE */
+#jokeSpawningSection {
+    flex-direction: column;
+    justify-items: center;
+}
+
+#jokeArea {
+    border: 1px grey solid;
+    min-height: 100px;
+    min-width: 35em;
+    margin: 2rem;
+    border-radius: 15px;
+    padding: 10px;
+    border-style: dotted;
+}
+
+#buttonArea {
+    margin: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    /* align-content: center; */
+    width: 20rem;
+}
+
+/* SINGLE ELEMENT STYLE */
+button {
+    padding: 0.7rem;
+    width: 200px;
+    background: rosybrown;
+    border-radius: 30px;
+    font-weight: 700;
+    border-style: ridge;
+}
+
+input,
+select {
+    padding: 10px;
+    border-radius: 30px;
+}
+
+label {
+    margin-top: 13px;
+    padding: 7px;
+    font-weight: 500;
+}

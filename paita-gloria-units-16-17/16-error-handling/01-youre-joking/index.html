@@ -10,17 +10,36 @@
     <meta name="description" content="My attempt at solving exercise 01 You're Joking - Unit 16">
     <meta name="author" content="Gloria Paita">
 
+    <link rel="stylesheet" href="./styles/style.css">
 </head>
 
 <body>
 
     <h1>You're Joking</h1>
-    
-    <div>
-        <h2>GRAB ONE JOKE</h2>
-        <h2>GRAB A BUNCH OF JOKES</h2>
-        <h2>GRAB JOKES OF A CERTAIN TYPE</h2>
-    </div>
+
+    <section id="jokeSpawningSection">
+
+        <div id="jokeArea">
+            <!-- Jokes will appear here -->
+        </div>
+
+        <div id="buttonArea">
+            <button id="singleJokeBtn">FETCH JOKE</button>
+
+            <!-- Menu Dropdown -->
+            <label for="joke-type">Which flavour?</label>
+            <select id="joke-type" name="joke-type">
+                <option value="general">General</option>
+                <option value="knock-knock">Knock-knock</option>
+                <option value="programming">Programming</option>
+            </select>
+
+            <!-- Number Input -->
+            <label for="joke-count">How many?</label>
+            <input type="number" id="joke-count" name="joke-count" min="1" max="10" value="1">
+        </div>
+
+    </section>
 
     <!-- end of body -->
     <script src="./scripts/main.js"></script>
